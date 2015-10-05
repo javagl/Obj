@@ -1,5 +1,21 @@
 # Obj - a simple Wavefront OBJ file loader and writer
 
+Maven dependency:
+
+    <dependency>
+      <groupId>de.javagl</groupId>
+      <artifactId>obj</artifactId>
+      <version>0.2.0</version>
+    </dependency>
+    
+Direct JAR link: [https://oss.sonatype.org/content/repositories/releases/de/javagl/obj/0.2.0/obj-0.2.0.jar](https://oss.sonatype.org/content/repositories/releases/de/javagl/obj/0.2.0/obj-0.2.0.jar)
+
+# Samples
+
+Samples showing how to use this library are available in [https://github.com/javagl/ObjSamples](https://github.com/javagl/ObjSamples)
+    
+
+# Overview
 
 This is a simple loader and writer for Wavefront `.OBJ` files. The elements
 that are currently supported are
