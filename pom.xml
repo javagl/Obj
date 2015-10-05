@@ -10,7 +10,7 @@
 
     <groupId>de.javagl</groupId>
     <artifactId>obj</artifactId>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>0.2.0</version>
 
     <name>obj</name>
     <url>https://github.com/javagl</url>
