@@ -1,2 +1,55 @@
-# Obj
-A simple Wavefront OBJ file loader
+# Obj - a simple Wavefront OBJ file loader and writer
+
+
+This is a simple loader and writer for Wavefront `.OBJ` files. The elements
+that are currently supported are
+
+ - Vertices
+ - Texture coordinate
+ - Normals
+ - Faces (with positive or negative indices)
+ - Groups
+ - Material groups
+ - MTL files
+ 
+The `Obj` interface is basically an in-memory representation of an OBJ file.
+It combines a `ReadableObj`, which provides the contents of the OBJ file,
+and a `WritableObj`, which may receive elements like vertices and faces
+in order to build an OBJ in memory.
+
+The `ObjReader` class may either create a new `Obj` object directly 
+from an input stream, or pass the elements that are read from the input 
+stream to a `WritableObj`.
+
+The `ObjWriter` class offers a method to write a `ReadableObj` object
+to an output stream.
+
+The `ObjData` class offers various methods to obtain the data that is
+stored in a `ReadableObj` as plain arrays or *direct* buffers. 
+
+The `ObjUtils` class offers basic utility methods for general operations
+on the OBJ data. For example, it may
+
+ - convert a single group of an OBJ into a new OBJ
+ - triangulate OBJ data
+ - make sure that texture coordinates or or normal coordinates are unique
+   for each vertex
+ - convert an OBJ to an OBJ that is uses the same index sets for vertices,
+   texture coordinates and normals
+   
+The latter operations are also summarized in one dedicated method, which
+aims at preparing the OBJ so that it may easily be rendered with OpenGL:
+    
+
+    FileInputStream inputStream = ...;
+
+    Obj obj = ObjUtils.convertToRenderable(
+        ObjReader.read(inputStream));
+
+    IntBuffer indices = ObjData.getFaceVertexIndices(obj);
+    FloatBuffer vertices = ObjData.getVertices(obj);
+    FloatBuffer texCoords = ObjData.getTexCoords(obj);
+    FloatBuffer normals = ObjData.getNormals(obj);
+
+These buffers may directly be used as the data for vertex buffer objects (VBO)
+in OpenGL. 

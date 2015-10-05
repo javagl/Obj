@@ -1,0 +1,14 @@
+newmtl material2
+Ka 1 0 1 
+Kd 1 0 1
+Ks 1 1 1
+Ns 200
+ 
+newmtl material3
+Ka 0 1 1
+Kd 0 1 1
+Ks 0 1 1
+Ns 100
+d 0.25
+
+
