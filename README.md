@@ -12,7 +12,7 @@ Direct JAR link: [https://oss.sonatype.org/content/repositories/releases/de/java
 
 # Samples
 
-Samples showing how to use this library are available in the [samples](https://github.com/javagl/Obj/ObjSamples/de/javagl/obj/samples).
+Samples showing how to use this library are available in the [samples directory](https://github.com/javagl/Obj/tree/master/ObjSamples/src/main/java/de/javagl/obj/samples).
     
 
 # Overview
