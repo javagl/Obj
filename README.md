@@ -12,7 +12,7 @@ Direct JAR link: [https://oss.sonatype.org/content/repositories/releases/de/java
 
 # Samples
 
-Samples showing how to use this library are available in [https://github.com/javagl/ObjSamples](https://github.com/javagl/ObjSamples)
+Samples showing how to use this library are available in the [samples](https://github.com/javagl/Obj/ObjSamples/de/javagl/obj/samples).
     
 
 # Overview
@@ -21,7 +21,7 @@ This is a simple loader and writer for Wavefront `.OBJ` files. The elements
 that are currently supported are
 
  - Vertices
- - Texture coordinate
+ - Texture coordinates
  - Normals
  - Faces (with positive or negative indices)
  - Groups
