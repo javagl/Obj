@@ -93,7 +93,7 @@ public class AbstractWritableObj implements WritableObj
     
 
     @Override
-    public final void addNormal(FloatTuple normal)
+    public void addNormal(FloatTuple normal)
     {
         // Empty default implementation
     }
