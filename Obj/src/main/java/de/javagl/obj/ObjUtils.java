@@ -62,13 +62,42 @@ public class ObjUtils
      */
     public static Obj convertToRenderable(ReadableObj input)
     {
-        Obj result = Objs.create();
-        result = triangulate(input);
-        result = makeTexCoordsUnique(result);
-        result = makeNormalsUnique(result);
-        result = makeVertexIndexed(result);
-        return result;
+        return convertToRenderable(input, Objs.create());
     }
+    
+    /**
+     * Convert the given {@link ReadableObj} into an {@link Obj} that has
+     * a structure appropriate for rendering it with OpenGL:
+     * <ul>
+     *   <li>{@link #triangulate(ReadableObj) Triangulate} it</li>
+     *   <li>
+     *     {@link #makeTexCoordsUnique(ReadableObj) 
+     *        Make the texture coordinates unique}
+     *   </li>
+     *   <li>
+     *     {@link #makeNormalsUnique(ReadableObj) 
+     *        Make the normals unique}
+     *   </li>
+     *   <li>
+     *     Make the result {@link #makeVertexIndexed(ReadableObj) 
+     *     vertex-indexed}
+     *   </li>
+     * </ul>  
+     * 
+     * @param <T> The type of the output
+     * @param input The input {@link ReadableObj} 
+     * @param output The output {@link WritableObj}
+     * @return The given output
+     */
+    public static <T extends WritableObj> T convertToRenderable(
+        ReadableObj input, T output)
+    {
+        Obj obj = triangulate(input);
+        obj = makeTexCoordsUnique(obj);
+        obj = makeNormalsUnique(obj);
+        return makeVertexIndexed(obj, output);
+    }
+    
     
     /**
      * Triangulates the given input {@link ReadableObj} and returns the 
