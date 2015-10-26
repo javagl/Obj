@@ -5,7 +5,7 @@ Maven dependency:
     <dependency>
       <groupId>de.javagl</groupId>
       <artifactId>obj</artifactId>
-      <version>0.2.0</version>
+      <version>0.2.1</version>
     </dependency>
     
 Direct JAR link: [https://oss.sonatype.org/content/repositories/releases/de/javagl/obj/0.2.0/obj-0.2.0.jar](https://oss.sonatype.org/content/repositories/releases/de/javagl/obj/0.2.0/obj-0.2.0.jar)
@@ -69,3 +69,21 @@ aims at preparing the OBJ so that it may easily be rendered with OpenGL:
 
 These buffers may directly be used as the data for vertex buffer objects (VBO)
 in OpenGL. 
+
+
+# Change log
+
+**0.2.1** (2015-10-26)
+
+- Bugfix: Made `AbstractWritableObj#addNormal(FloatTuple)` non-final
+- Added methods in `ObjReader` and `MtlReader` that accept a `Reader`
+  instead of an `InputStream`, and methods in `ObjWriter` and 
+  `MtlWriter` that accept a `Writer` instead of an `OutputStream`
+- Added implementation of `ObjUtils.convertToRenderable` that
+   receives a `WritableObj`  
+  
+**0.2.0** (2015-10-05) : 
+
+- Initial public release on GitHub and Maven Central
+   
+
