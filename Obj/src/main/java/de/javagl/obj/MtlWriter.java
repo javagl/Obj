@@ -29,6 +29,7 @@ package de.javagl.obj;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 /**
  * A class that may write {@link Mtl} objects into an MTL file 
@@ -47,40 +48,54 @@ public class MtlWriter
         Iterable<? extends Mtl> mtls, OutputStream outputStream) 
         throws IOException
     {
+        OutputStreamWriter outputStreamWriter = 
+            new OutputStreamWriter(outputStream);
+        write(mtls, outputStreamWriter);
+    }
+    
+    /**
+     * Write the given {@link Mtl} objects to the given writer. The caller
+     * is responsible for closing the writer.
+     * 
+     * @param mtls The {@link Mtl} objects
+     * @param writer The writer to write to
+     * @throws IOException If an IO error occurs
+     */
+    public static void write(
+        Iterable<? extends Mtl> mtls, Writer writer) 
+        throws IOException
+    {
         for (Mtl mtl : mtls)
         {
-            write(mtl, outputStream);
+            write(mtl, writer);
         }
     }
     
     /**
-     * Write the given {@link Mtl} to the given stream
+     * Write the given {@link Mtl} to the given writer
      * 
      * @param mtl The {@link Mtl}
-     * @param outputStream The stream
+     * @param writer The writer
      * @throws IOException If an IO error occurs
      */
-    private static void write(Mtl mtl, OutputStream outputStream)
+    private static void write(Mtl mtl, Writer writer)
         throws IOException
     {
-        OutputStreamWriter outputStreamWriter = 
-            new OutputStreamWriter(outputStream);
-
-        outputStreamWriter.write("newmtl "+mtl.getName()+"\n");
-        outputStreamWriter.write("Ka "+
+        writer.write("newmtl "+mtl.getName()+"\n");
+        writer.write("Ka "+
             FloatTuples.createString(mtl.getKa())+"\n");
-        outputStreamWriter.write("Kd "+
+        writer.write("Kd "+
             FloatTuples.createString(mtl.getKd())+"\n");
-        outputStreamWriter.write("Ks "+
+        writer.write("Ks "+
             FloatTuples.createString(mtl.getKs())+"\n");
         if (mtl.getMapKd() != null)
         {
-            outputStreamWriter.write("map_Kd "+mtl.getMapKd()+"\n");
+            writer.write("map_Kd "+mtl.getMapKd()+"\n");
         }
-        outputStreamWriter.write("Ns "+mtl.getNs()+"\n");
-        outputStreamWriter.write("d "+mtl.getD()+"\n");
+        writer.write("Ns "+mtl.getNs()+"\n");
+        writer.write("d "+mtl.getD()+"\n");
         
-        outputStreamWriter.flush();
+        writer.flush();
     }
     
 

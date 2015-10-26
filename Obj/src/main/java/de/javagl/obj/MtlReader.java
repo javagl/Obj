@@ -30,6 +30,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -43,6 +44,7 @@ public class MtlReader
     /**
      * Read the MTL data from the given stream, and return
      * it as {@link Mtl} objects.
+     * The caller is responsible for closing the given stream.
      * 
      * @param inputStream The stream to read from.
      * @return The list of Mtl object.
@@ -51,10 +53,44 @@ public class MtlReader
     public static List<Mtl> read(InputStream inputStream) 
         throws IOException
     {
-        List<Mtl> mtlList = new ArrayList<Mtl>();
         BufferedReader reader = new BufferedReader(
             new InputStreamReader(inputStream));
+        return readImpl(reader);
+    }
 
+    /**
+     * Read the MTL data from the given reader, and return
+     * it as {@link Mtl} objects.
+     * The caller is responsible for closing the given reader.
+     * 
+     * @param reader The reader to read from.
+     * @return The list of Mtl object.
+     * @throws IOException If an IO error occurs
+     */
+    public static List<Mtl> read(Reader reader) 
+        throws IOException
+    {
+        if (reader instanceof BufferedReader)
+        {
+            return readImpl((BufferedReader)reader);
+        }
+        return readImpl(new BufferedReader(reader));
+    }
+        
+    /**
+     * Read the MTL data from the given reader, and return
+     * it as {@link Mtl} objects.
+     * The caller is responsible for closing the given reader.
+     * 
+     * @param reader The reader to read from.
+     * @return The list of Mtl object.
+     * @throws IOException If an IO error occurs
+     */
+    private static List<Mtl> readImpl(BufferedReader reader) 
+        throws IOException
+    {
+        List<Mtl> mtlList = new ArrayList<Mtl>();
+        
         DefaultMtl currentMtl = null;
 
         while(true)

@@ -30,6 +30,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -43,7 +45,8 @@ import java.util.StringTokenizer;
 public class ObjReader
 {
     /**
-     * Read the OBJ data from the given stream and return it as an {@link Obj}
+     * Read the OBJ data from the given stream and return it as an {@link Obj}.
+     * The caller is responsible for closing the given stream.
      * 
      * @param inputStream The stream to read from 
      * @return The {@link Obj}
@@ -56,7 +59,8 @@ public class ObjReader
     
     /**
      * Read the OBJ data from the given stream and store the read
-     * elements in the given {@link WritableObj}
+     * elements in the given {@link WritableObj}.
+     * The caller is responsible for closing the given stream.
      * 
      * @param <T> The output type
      * @param inputStream The stream to read from 
@@ -69,8 +73,61 @@ public class ObjReader
         throws IOException
     {
         BufferedReader reader = new BufferedReader(
-            new InputStreamReader(inputStream));
-
+            new InputStreamReader(inputStream, StandardCharsets.US_ASCII));
+        return readImpl(reader, output);
+    }
+    
+    /**
+     * Read the OBJ data from the given reader and return it as an {@link Obj}.
+     * The caller is responsible for closing the given reader.
+     * 
+     * @param reader The reader to read from 
+     * @return The {@link Obj}
+     * @throws IOException If an IO error occurs
+     */
+    public static Obj read(Reader reader) throws IOException
+    {
+        return read(reader, Objs.create());
+    }
+    
+    /**
+     * Read the OBJ data from the given reader and store the read
+     * elements in the given {@link WritableObj}.
+     * The caller is responsible for closing the given reader.
+     * 
+     * @param <T> The output type
+     * @param reader The reader to read from 
+     * @param output The {@link WritableObj} to store the read data
+     * @return The output
+     * @throws IOException If an IO error occurs
+     */
+    public static <T extends WritableObj> T read(
+        Reader reader, T output) 
+        throws IOException
+    {
+        if (reader instanceof BufferedReader)
+        {
+            return readImpl((BufferedReader)reader, output);
+        }
+        return readImpl(new BufferedReader(reader), output);
+        
+    }
+    
+    /**
+     * Read the OBJ data from the given reader and store the read
+     * elements in the given {@link WritableObj}.
+     * The caller is responsible for closing the given reader.
+     * 
+     * @param <T> The output type
+     * @param reader The reader to read from 
+     * @param output The {@link WritableObj} to store the read data
+     * @return The output
+     * @throws IOException If an IO error occurs
+     */
+    private static <T extends WritableObj> T readImpl(
+        BufferedReader reader, T output) 
+        throws IOException
+    {        
         ObjFaceParser objFaceParser = new ObjFaceParser();
 
         int vertexCounter = 0;

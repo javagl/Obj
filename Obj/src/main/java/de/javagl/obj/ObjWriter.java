@@ -29,6 +29,7 @@ package de.javagl.obj;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
@@ -51,40 +52,53 @@ public class ObjWriter
     {
         OutputStreamWriter outputStreamWriter = 
             new OutputStreamWriter(outputStream);
-
+        write(input, outputStreamWriter);
+    }
+    
+    /**
+     * Writes the given {@link ReadableObj} to the given writer. The caller
+     * is responsible for closing the writer.
+     * 
+     * @param input The {@link ReadableObj} to write.
+     * @param writer The writer to write to.
+     * @throws IOException If an IO error occurs.
+     */
+    public static void write(ReadableObj input, Writer writer) 
+        throws IOException
+    {
         // Write the mtl file name
         List<String> mtlFileNames = input.getMtlFileNames();
         if (!mtlFileNames.isEmpty())
         {
-            outputStreamWriter.write("mtllib ");
+            writer.write("mtllib ");
             for (int i=0; i<mtlFileNames.size(); i++)
             {
                 if (i > 0)
                 {
-                    outputStreamWriter.write(" ");
+                    writer.write(" ");
                 }
-                outputStreamWriter.write(mtlFileNames.get(i));
+                writer.write(mtlFileNames.get(i));
             }
-            outputStreamWriter.write("\n");
+            writer.write("\n");
         }
         
         // Write the vertex- texture coordinate and normal data
         for(int i = 0; i < input.getNumVertices(); i++)
         {
             FloatTuple vertex = input.getVertex(i);
-            outputStreamWriter.write(
+            writer.write(
                 "v "+FloatTuples.createString(vertex) + "\n");
         }
         for(int i = 0; i < input.getNumTexCoords(); i++)
         {
             FloatTuple texCoord = input.getTexCoord(i);
-            outputStreamWriter.write(
+            writer.write(
                 "vt "+FloatTuples.createString(texCoord) + "\n");
         }
         for(int i = 0; i < input.getNumNormals(); i++)
         {
             FloatTuple normal = input.getNormal(i);
-            outputStreamWriter.write(
+            writer.write(
                 "vn "+FloatTuples.createString(normal) + "\n");
         }
 
@@ -102,13 +116,13 @@ public class ObjWriter
                         Collections.singleton("default"));
                 if (!skipWritingDefaultGroup || !isDefaultGroup)
                 {
-                    outputStreamWriter.write("g ");
+                    writer.write("g ");
                     for (String activatedGroupName : activatedGroupNames)
                     {
-                        outputStreamWriter.write(activatedGroupName);
-                        outputStreamWriter.write(" ");
+                        writer.write(activatedGroupName);
+                        writer.write(" ");
                     }
-                    outputStreamWriter.write("\n");
+                    writer.write("\n");
                 }
                 skipWritingDefaultGroup = false;
             }
@@ -117,14 +131,13 @@ public class ObjWriter
                 input.getActivatedMaterialGroupName(face);
             if (activatedMaterialGroupName != null)
             {
-                outputStreamWriter.write(
+                writer.write(
                     "usemtl " + activatedMaterialGroupName + "\n");
             }
             String faceString = ObjFaces.createString(face);
-            outputStreamWriter.write(faceString + "\n");
+            writer.write(faceString + "\n");
         }
-        
-        outputStreamWriter.flush();
+        writer.flush();
     }
     
     /**
