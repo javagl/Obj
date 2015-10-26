@@ -91,17 +91,6 @@
                         <version>1.8.1</version>
                     </dependency>
                 </dependencies>                
-                <executions>
-                    <execution>
-                        <id>default</id>
-                        <goals>
-                            <goal>perform</goal>
-                        </goals>
-                        <configuration>
-                            <pomFileName>Obj/pom.xml</pomFileName>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>            
         </plugins>
     </build>
