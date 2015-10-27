@@ -8,11 +8,11 @@ Maven dependency:
       <version>0.2.1</version>
     </dependency>
     
-Direct JAR link: [https://oss.sonatype.org/content/repositories/releases/de/javagl/obj/0.2.0/obj-0.2.0.jar](https://oss.sonatype.org/content/repositories/releases/de/javagl/obj/0.2.0/obj-0.2.0.jar)
+Direct JAR link: [https://oss.sonatype.org/content/repositories/releases/de/javagl/obj/0.2.1/obj-0.2.1.jar](https://oss.sonatype.org/content/repositories/releases/de/javagl/obj/0.2.1/obj-0.2.1.jar)
 
 # Samples
 
-Samples showing how to use this library are available in the [samples directory](https://github.com/javagl/Obj/tree/master/ObjSamples/src/main/java/de/javagl/obj/samples).
+Samples showing how to use this library are available in the [ObjSamples project](https://github.com/javagl/ObjSamples).
     
 
 # Overview
