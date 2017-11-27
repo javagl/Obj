@@ -29,6 +29,7 @@ package de.javagl.obj;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Utility methods for handling {@link Obj}s.<br>
@@ -136,11 +137,7 @@ public class ObjUtils
         for (int i=0; i<input.getNumFaces(); i++)
         {
             ObjFace face = input.getFace(i);
-            
-            output.setActiveGroupNames(
-                input.getActivatedGroupNames(face));
-            output.setActiveMaterialGroupName(
-                input.getActivatedMaterialGroupName(face));
+            activateGroups(input, face, output);
             if (face.getNumVertices() == 3)
             {
                 output.addFace(face);
@@ -157,6 +154,7 @@ public class ObjUtils
         }
         return output;
     }
+    
     
     /**
      * Returns the given group of the given {@link ReadableObj} as a new
@@ -221,10 +219,7 @@ public class ObjUtils
 
             DefaultObjFace resultFace = ObjFaces.create(face);
             
-            output.setActiveGroupNames(
-                input.getActivatedGroupNames(face));
-            output.setActiveMaterialGroupName(
-                input.getActivatedMaterialGroupName(face));
+            activateGroups(input, face, output);
             
             // The indices of the cloned face have to be adjusted, 
             // so that they point to the correct vertices in the output
@@ -506,10 +501,8 @@ public class ObjUtils
         for(int i = 0; i < input.getNumFaces(); i++)
         {
             ObjFace inputFace = input.getFace(i);
-            output.setActiveGroupNames(
-                input.getActivatedGroupNames(inputFace));
-            output.setActiveMaterialGroupName(
-                input.getActivatedMaterialGroupName(inputFace));
+            
+            activateGroups(input, inputFace, output);
             
             ObjFace outputFace = inputFace;
             
@@ -683,10 +676,8 @@ public class ObjUtils
         for(int i = 0; i < input.getNumFaces(); i++)
         {
             ObjFace inputFace = input.getFace(i);
-            output.setActiveGroupNames(
-                input.getActivatedGroupNames(inputFace));
-            output.setActiveMaterialGroupName(
-                input.getActivatedMaterialGroupName(inputFace));
+            
+            activateGroups(input, inputFace, output);
             
             DefaultObjFace outputFace = ObjFaces.create(inputFace);
             if (inputFace.containsTexCoordIndices())
@@ -711,6 +702,33 @@ public class ObjUtils
     }
     
     
+    /**
+     * Set the active group names and material group name in the given
+     * output based on the group names and material group name that the
+     * given face activated in the input
+     * 
+     * @param input The input {@link ReadableObj} 
+     * @param face The {@link ObjFace} to perform the activation for
+     * @param output The output {@link WritableObj} 
+     */
+    private static void activateGroups(
+        ReadableObj input, ObjFace face, WritableObj output)
+    {
+        Set<String> activatedGroupNames = 
+            input.getActivatedGroupNames(face);
+        if (activatedGroupNames != null)
+        {
+            output.setActiveGroupNames(
+                activatedGroupNames);
+        }
+        String activatedMaterialGroupName = 
+            input.getActivatedMaterialGroupName(face);
+        if (activatedMaterialGroupName != null)
+        {
+            output.setActiveMaterialGroupName(
+                activatedMaterialGroupName);
+        }
+    }
     
     
     /**
