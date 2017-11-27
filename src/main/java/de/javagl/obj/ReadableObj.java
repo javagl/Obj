@@ -67,7 +67,7 @@ public interface ReadableObj
     /**
      * Returns the number of texture coordinates in the Obj.
      * 
-     * @return The number of texture coodrinates in the Obj.
+     * @return The number of texture coordinates in the Obj.
      */
     int getNumTexCoords();
 
