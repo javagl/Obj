@@ -532,11 +532,33 @@ public class ObjData
      */
     public static float[] getTexCoordsArray(ReadableObj obj, int dimensions)
     {
-        float array[] = new float[obj.getNumTexCoords() * dimensions];
-        getTexCoords(obj, FloatBuffer.wrap(array), dimensions);
-        return array;
+        return getTexCoordsArray(obj, dimensions, false);
     }
 
+    /**
+     * Returns all texture coordinates of the given 
+     * {@link ReadableObj} as an array.
+     * 
+     * @param obj The {@link ReadableObj}
+     * @param dimensions The dimensions that are assumed for the coordinates
+     * @param flipY Whether the texture coordinates should be flipped 
+     * vertically. This means that the y-coordinates (at dimension index 1)
+     * will be replaced with <code>1.0f - y</code>. Most image loaders provide
+     * image data with the first pixel being the <i>upper left</i> pixel of
+     * the image. But OpenGL <code>glTexImage2D</code> calls expect the first
+     * pixel to be the <i>lower left</i>. Flipping the texture coordinates
+     * by passing <code>flipY=true</code> to this method allows to compensate
+     * for this mismatch.  
+     * @return The resulting array
+     */
+    public static float[] getTexCoordsArray(
+        ReadableObj obj, int dimensions, boolean flipY)
+    {
+        float array[] = new float[obj.getNumTexCoords() * dimensions];
+        getTexCoords(obj, FloatBuffer.wrap(array), dimensions, flipY);
+        return array;
+    }
+    
     /**
      * Returns all texture coordinates of the given 
      * {@link ReadableObj} as direct FloatBuffer. The position 
@@ -549,12 +571,37 @@ public class ObjData
      */
     public static FloatBuffer getTexCoords(ReadableObj obj, int dimensions)
     {
+        return getTexCoords(obj, dimensions, false);
+    }
+    
+    /**
+     * Returns all texture coordinates of the given 
+     * {@link ReadableObj} as direct FloatBuffer. The position 
+     * of the returned buffer will be 0, and its limit and
+     * capacity will match the stored data.
+     * 
+     * @param obj The {@link ReadableObj}
+     * @param dimensions The dimensions that are assumed for the coordinates
+     * @param flipY Whether the texture coordinates should be flipped 
+     * vertically. This means that the y-coordinates (at dimension index 1)
+     * will be replaced with <code>1.0f - y</code>. Most image loaders provide
+     * image data with the first pixel being the <i>upper left</i> pixel of
+     * the image. But OpenGL <code>glTexImage2D</code> calls expect the first
+     * pixel to be the <i>lower left</i>. Flipping the texture coordinates
+     * by passing <code>flipY=true</code> to this method allows to compensate
+     * for this mismatch.  
+     * @return The resulting buffer
+     */
+    public static FloatBuffer getTexCoords(
+        ReadableObj obj, int dimensions, boolean flipY)
+    {
         FloatBuffer buffer = 
             createDirectFloatBuffer(obj.getNumTexCoords() * dimensions);
-        getTexCoords(obj, buffer, dimensions);
+        getTexCoords(obj, buffer, dimensions, flipY);
         buffer.position(0);
         return buffer;
     }
+    
 
     /**
      * Stores the texture coordinates of the given {@link ReadableObj} 
@@ -570,16 +617,61 @@ public class ObjData
     public static void getTexCoords(
         ReadableObj obj, FloatBuffer target, int dimensions)
     {
-        for(int i = 0; i < obj.getNumTexCoords(); i++)
+        getTexCoords(obj, target, dimensions, false);
+    }
+
+    /**
+     * Stores the texture coordinates of the given {@link ReadableObj} 
+     * in the given buffer. The position of the target will be increased by 
+     * <code>obj.getNumTexCoords() * dimensions</code>. The position
+     * of the given buffer will be advanced accordingly.
+     * 
+     * @param obj The {@link ReadableObj}
+     * @param target The target that will store the result
+     * @param dimensions The dimensions that are assumed for the coordinates
+     * @param flipY Whether the texture coordinates should be flipped 
+     * vertically. This means that the y-coordinates (at dimension index 1)
+     * will be replaced with <code>1.0f - y</code>. Most image loaders provide
+     * image data with the first pixel being the <i>upper left</i> pixel of
+     * the image. But OpenGL <code>glTexImage2D</code> calls expect the first
+     * pixel to be the <i>lower left</i>. Flipping the texture coordinates
+     * by passing <code>flipY=true</code> to this method allows to compensate
+     * for this mismatch.  
+     * @throws BufferOverflowException If the target can not store the result
+     */
+    public static void getTexCoords(
+        ReadableObj obj, FloatBuffer target, int dimensions, boolean flipY)
+    {
+        if (flipY) 
         {
-            FloatTuple tuple = obj.getTexCoord(i);
-            for (int j=0; j<dimensions; j++)
+            for(int i = 0; i < obj.getNumTexCoords(); i++)
             {
-                target.put(tuple.get(j));
+                FloatTuple tuple = obj.getTexCoord(i);
+                for (int j=0; j<dimensions; j++)
+                {
+                    if (j == 1) 
+                    {
+                        target.put(1.0f - tuple.get(j));
+                    }
+                    else
+                    {
+                        target.put(tuple.get(j));
+                    }
+                }
+            }
+        }
+        else
+        {
+            for(int i = 0; i < obj.getNumTexCoords(); i++)
+            {
+                FloatTuple tuple = obj.getTexCoord(i);
+                for (int j=0; j<dimensions; j++)
+                {
+                    target.put(tuple.get(j));
+                }
             }
         }
     }
-
     
     //=========================================================================
     // Normals
