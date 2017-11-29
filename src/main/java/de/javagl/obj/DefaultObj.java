@@ -106,7 +106,7 @@ final class DefaultObj implements Obj
      * added subsequently 
      */
     private Set<String> nextActiveGroupNames = null;
-
+    
     /**
      * The name for the material group that should be used for faces that are
      * added subsequently 
@@ -119,11 +119,21 @@ final class DefaultObj implements Obj
      */
     private List<DefaultObjGroup> activeGroups = null;
 
+    /** 
+     * The names of the groups that faces are currently added to
+     */
+    private Set<String> activeGroupNames = null;
+
     /**
      * The material group that is currently active, and to which faces will be
      * added 
      */
     private DefaultObjGroup activeMaterialGroup = null;
+    
+    /**
+     * The name of the material group that is currently active
+     */
+    private String activeMaterialGroupName = null;
 
     /**
      * Creates a new, empty DefaultObj.
@@ -348,14 +358,22 @@ final class DefaultObj implements Obj
         if (nextActiveGroupNames != null)
         {
             activeGroups = getGroupsInternal(nextActiveGroupNames);
-            startedGroupNames.put(face, nextActiveGroupNames);
+            if (!nextActiveGroupNames.equals(activeGroupNames))
+            {
+                startedGroupNames.put(face, nextActiveGroupNames);
+            }
+            activeGroupNames = nextActiveGroupNames;
             nextActiveGroupNames = null;
         }
         if (nextActiveMaterialGroupName != null)
         {
             activeMaterialGroup = 
                 getMaterialGroupInternal(nextActiveMaterialGroupName);
-            startedMaterialGroupNames.put(face, nextActiveMaterialGroupName);
+            if (!nextActiveMaterialGroupName.equals(activeMaterialGroupName))
+            {
+                startedMaterialGroupNames.put(face, nextActiveMaterialGroupName);
+            }
+            activeMaterialGroupName = nextActiveMaterialGroupName;
             nextActiveMaterialGroupName = null;
         }
         faces.add(face);
