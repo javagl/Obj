@@ -31,6 +31,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
 
 /**
  * Methods to obtain the data from {@link ReadableObj}s as plain arrays
@@ -455,7 +456,6 @@ public class ObjData
         }
     }
     
-    
     //=========================================================================
     // Vertices
     
@@ -731,6 +731,33 @@ public class ObjData
         }
     }
     
+    /**
+     * Convert the given IntBuffer to a (direct) ShortBuffer, by casting all
+     * elements to <code>short</code>. <br>
+     * <br>
+     * Note that these casts will be unchecked. If there is any value in the 
+     * input buffer that is larger than the maximum value that a 
+     * <b>signed</b> <code>short</code> can represent, then the 
+     * <code>short</code> value will become negative. The resulting buffer 
+     * will then still be valid for passing the it to OpenGL when the index 
+     * mode is <code>GL_UNSIGNED_SHORT</code>, because the bitwise 
+     * representation is the same. When one of the integer values is larger 
+     * than the value that can be represented with an <b>unsigned</b>
+     * <code>short</code>, then the resulting indices will be invalid
+     * and cause rendering artifacts.  
+     * 
+     * @param intBuffer The IntBuffer
+     * @return The ShortBuffer
+     */
+    public static ShortBuffer convertToShortBuffer(IntBuffer intBuffer)
+    {
+        ShortBuffer shortBuffer = createDirectShortBuffer(intBuffer.capacity());
+        for (int i = 0; i < intBuffer.capacity(); i++)
+        {
+            shortBuffer.put(i, (short) intBuffer.get());
+        }
+        return shortBuffer;
+    }    
     
     /**
      * Create a direct IntBuffer with the given size
@@ -743,6 +770,19 @@ public class ObjData
         return ByteBuffer.allocateDirect(size * 4)
             .order(ByteOrder.nativeOrder())
             .asIntBuffer();
+    }
+    
+    /**
+     * Create a direct ShortBuffer with the given size
+     * 
+     * @param size The size 
+     * @return The ShortBuffer
+     */
+    private static ShortBuffer createDirectShortBuffer(int size)
+    {
+        return ByteBuffer.allocateDirect(size * 2)
+            .order(ByteOrder.nativeOrder())
+            .asShortBuffer();
     }
 
     /**
