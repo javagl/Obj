@@ -44,7 +44,12 @@ The `ObjData` class offers various methods to obtain the data that is
 stored in a `ReadableObj` as plain arrays or *direct* buffers. 
 
 The `ObjUtils` class offers basic utility methods for general operations
-on the OBJ data. For example, it may
+on the OBJ data. 
+
+## Rendering OBJ data with OpenGL
+   
+The `ObjUtils` class contains methods that aim at preparing the OBJ so 
+that it may easily be rendered with OpenGL. These methods may...
 
  - convert a single group of an OBJ into a new OBJ
  - triangulate OBJ data
@@ -52,26 +57,100 @@ on the OBJ data. For example, it may
    for each vertex
  - convert an OBJ to an OBJ that is uses the same index sets for vertices,
    texture coordinates and normals
-   
-The latter operations are also summarized in one dedicated method, which
-aims at preparing the OBJ so that it may easily be rendered with OpenGL:
-    
 
-    FileInputStream inputStream = ...;
+The latter operations are also summarized in one dedicated method, namely
+the `ObjUtils.convertToRenderable` method:
+
+    InputStream inputStream = ...;
 
     Obj obj = ObjUtils.convertToRenderable(
         ObjReader.read(inputStream));
 
     IntBuffer indices = ObjData.getFaceVertexIndices(obj);
     FloatBuffer vertices = ObjData.getVertices(obj);
-    FloatBuffer texCoords = ObjData.getTexCoords(obj);
+    FloatBuffer texCoords = ObjData.getTexCoords(obj, 2);
     FloatBuffer normals = ObjData.getNormals(obj);
 
 These buffers may directly be used as the data for vertex buffer objects (VBO)
 in OpenGL. 
 
+### Extracting material groups
+
+An OBJ may contain multiple material definitions. When such an OBJ should
+be rendered with OpenGL, this usually means that there will be one shader
+for each material - or at least, different textures may have to be used
+for different parts of the objects. This library offers methods to extract 
+the parts of the OBJ that have the same material. In the OBJ format, these 
+groups consist of the triangles that follow one `usemtl` directive.
+
+When such an OBJ file is read, the resulting material groups may be obtained
+from the `ReadableObj` object, and each of them can be converted into a new
+`Obj` object using the `ObjUtils#groupToObj` method. 
+
+The `ObjSplitting` class contains a convenience method for this:
+
+    Obj obj = ObjReader.read(...);
+    List<Obj> mtlObjs = ObjSplitting.splitByMaterialGroups(obj);;
+
+Each of these `Obj` objects may then be converted into a renderable OBJ,
+using the `ObjUtils.convertToRenderable` method as described above, 
+and then be rendered with the appropriate shader for the respective
+material.
+
+### Limiting the number of vertices per OBJ
+
+In certain environments, the number of vertices that may be involved in
+one rendering call is limited. Particularly, in WebGL or OpenGL ES 2.0,
+the indices that are used for indexed draw calls may only be of the type
+`GL_UNSIGNED_SHORT`, which means that no object may have more than
+65k vertices. In these cases, larger OBJ files have to be split into
+multiple parts. Additionally, the index buffers that are passed to 
+the rendering API may not contain (4-byte) `int` elements, but only
+(2-byte) `short` elements. 
+
+The `ObjSplitting` class contains a method that allows splitting an
+OBJ into multiple parts, each having only a maximum number of vertices.
+Additionally, the `ObjData` class contains methods for converting 
+an `IntBuffer` into a `ShortBuffer`. 
+ 
+So in order to split a large OBJ into multiple parts, and render each
+part with WebGL or OpenGL ES 2.0, the following code can be used:
+
+    Obj largeObj = ObjReader.read(...);
+    Obj renderableObj = ObjUtils.convertToRenderable(largeObj);
+    
+    if (renderableObj.getNumVertices() > 65000)
+    {
+        // If this has to be rendered with OpenGL ES 2.0, then
+        // the object may not contain more than 65k vertices!
+        // Split it into multiple parts: 
+        List<Obj> renderableParts = 
+            ObjSplitting.splitByMaxNumVertices(renderableObj, 65000);
+        for (Obj renderablePart : renderableParts)
+        {
+        
+            // Obtain the indices as a "short" buffer that may
+            // be used for OpenGL rendering with the index 
+            // type GL_UNSIGNED_SHORT
+            ShortBuffer indices = ObjData.convertToShortBuffer(
+                ObjData.getFaceVertexIndices(renderablePart));
+            ...
+            
+            sendToRenderer(indices, ...);
+        }
+     }
+     ...
+
+
+--- 
 
 # Change log
+
+**0.2.2-SNAPSHOT**
+
+- Added `ObjSplitting` class for splitting OBJs
+- Added `ObjData#convertToShortBuffer` method
+- Added `ObjUtils#add` method for combining OBJs 
 
 **0.2.1** (2015-10-26)
 

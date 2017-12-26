@@ -69,6 +69,54 @@ public class ObjFaces
         return result;
     }
     
+    /**
+     * Create a copy of the given face, adding the given offsets to the
+     * respective indices. If the given face does not contain texture 
+     * coordinate or normal indices, then the respective offsets will
+     * be ignored.<br> 
+     * 
+     * @param face The input face
+     * @param verticesOffset The offset for the vertex indices
+     * @param texCoordsOffset  The offset for the texture coordinate indices
+     * @param normalsOffset The offset for the normal indices
+     * @return The copy
+     */
+    static DefaultObjFace createWithOffsets(ObjFace face, 
+        int verticesOffset, int texCoordsOffset, int normalsOffset)
+    {
+        int v[] = new int[face.getNumVertices()];
+        int vt[] = null;
+        int vn[] = null;
+        for(int i = 0; i < face.getNumVertices(); i++)
+        {
+            v[i] = face.getVertexIndex(i) + verticesOffset;
+        }
+
+        if(face.containsTexCoordIndices())
+        {
+            vt = new int[face.getNumVertices()];
+            for(int i = 0; i < face.getNumVertices(); i++)
+            {
+                vt[i] = face.getTexCoordIndex(i) + texCoordsOffset;
+            }
+        }
+
+        if(face.containsNormalIndices())
+        {
+            vn = new int[face.getNumVertices()];
+            for(int i = 0; i < face.getNumVertices(); i++)
+            {
+                vn[i] = face.getNormalIndex(i) + normalsOffset;
+            }
+        }
+        
+        DefaultObjFace result = new DefaultObjFace(v, vt, vn);
+        return result;
+    }
+    
+    
+    
+    
     
     /**
      * Create a copy of the given face, using only the specified vertices 

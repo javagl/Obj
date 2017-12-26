@@ -583,6 +583,51 @@ public class ObjUtils
             output.addNormal(input.getNormal(i));
         }
     }
+    
+    /**
+     * Add all vertices, texture coordinates, normals and faces of the given
+     * {@link ReadableObj} to the given output {@link Obj}.<br>
+     * <br>
+     * Note that this may cause new groups or material groups to be created
+     * in the output OBJ. If the output OBJ contains group names or material 
+     * group names that also exist in the input OBJ, then the elements of the
+     * input OBJ will be added to these existing groups.  
+     * 
+     * @param input The {@link ReadableObj}
+     * @param output The target {@link Obj}
+     */
+    public static void add(ReadableObj input, Obj output)
+    {
+        int verticesOffset = output.getNumVertices();
+        for (int i=0; i<input.getNumVertices(); i++)
+        {
+            output.addVertex(input.getVertex(i));
+        }
+        
+        int texCoordsOffset = output.getNumTexCoords();
+        for (int i=0; i<input.getNumTexCoords(); i++)
+        {
+            output.addTexCoord(input.getTexCoord(i));
+        }
+        
+        int normalsOffset = output.getNumNormals();
+        for (int i=0; i<input.getNumNormals(); i++)
+        {
+            output.addNormal(input.getNormal(i));
+        }
+        
+        for(int i = 0; i < input.getNumFaces(); i++)
+        {
+            ObjFace inputFace = input.getFace(i);
+            
+            activateGroups(input, inputFace, output);
+            
+            DefaultObjFace outputFace = ObjFaces.createWithOffsets(
+                inputFace, verticesOffset, texCoordsOffset, normalsOffset);
+            output.addFace(outputFace);
+        }
+    }
+    
 
     /**
      * Converts the given {@link ReadableObj} data into data that uses the
