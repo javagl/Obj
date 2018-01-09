@@ -26,8 +26,9 @@
  */
 package de.javagl.obj;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Methods for splitting {@link ReadableObj} objects into multiple parts, 
@@ -43,17 +44,18 @@ public class ObjSplitting
      * @param obj The input {@link ReadableObj}
      * @return One {@link Obj} for each non-empty group of the given input
      */
-    public static List<Obj> splitByGroups(ReadableObj obj)
+    public static Map<String, Obj> splitByGroups(ReadableObj obj)
     {
-        List<Obj> objs = new ArrayList<Obj>();
+        Map<String, Obj> objs = new LinkedHashMap<String, Obj>();
         int numGroups = obj.getNumGroups();
         for (int i = 0; i < numGroups; i++)
         {
             ObjGroup group = obj.getGroup(i);
             if (group.getNumFaces() > 0)
             {
+                String groupName = group.getName();
                 Obj groupObj = ObjUtils.groupToObj(obj, group, null);
-                objs.add(groupObj);
+                objs.put(groupName, groupObj);
             }
         }
         return objs;
@@ -66,26 +68,30 @@ public class ObjSplitting
      * <br>
      * Note that if the given OBJ does not contain any material groups
      * (that is, when it does not refer to a material with a 
-     * <code>usemtl</code> directive), then the resulting list will
-     * be empty. Faces that are not associated with any material group 
+     * <code>usemtl</code> directive), then the resulting map will
+     * be empty. <br>
+     * <br>
+     * Faces that are not associated with any material group 
      * will not be contained in the output.
      * 
      * @param obj The input {@link ReadableObj}
-     * @return One {@link Obj} for each (non-empty) material group of 
-     * the given input
+     * @return The mapping from material group names (corresponding to the
+     * <code>usemtl</code> directives in the input file) to the {@link Obj} 
+     * that represents this material group.
      */
-    public static List<Obj> splitByMaterialGroups(ReadableObj obj)
+    public static Map<String, Obj> splitByMaterialGroups(ReadableObj obj)
     {
-        List<Obj> objs = new ArrayList<Obj>();
+        Map<String, Obj> objs = new LinkedHashMap<String, Obj>();
         int numMaterialGroups = obj.getNumMaterialGroups();
         for (int i = 0; i < numMaterialGroups; i++)
         {
             ObjGroup materialGroup = obj.getMaterialGroup(i);
             if (materialGroup.getNumFaces() > 0)
             {
+                String materialGroupName = materialGroup.getName();
                 Obj materialGroupObj = 
                     ObjUtils.groupToObj(obj, materialGroup, null);
-                objs.add(materialGroupObj);
+                objs.put(materialGroupName, materialGroupObj);
             }
         }
         return objs;
