@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -17,7 +18,7 @@ public class TestObjSplitting
         Obj obj = ObjReader.read(getClass().getResourceAsStream(
             "/squareAndTriangleInTwoGroups.obj"));
         
-        List<Obj> objs = ObjSplitting.splitByGroups(obj);
+        Map<String, Obj> objs = ObjSplitting.splitByGroups(obj);
         assertEquals(2, objs.size());
     }
 
@@ -28,7 +29,7 @@ public class TestObjSplitting
         Obj obj = ObjReader.read(getClass().getResourceAsStream(
             "/square.obj"));
         
-        List<Obj> objs = ObjSplitting.splitByGroups(obj);
+        Map<String, Obj> objs = ObjSplitting.splitByGroups(obj);
         assertEquals(1, objs.size());
     }
     
@@ -39,7 +40,7 @@ public class TestObjSplitting
         Obj obj = ObjReader.read(getClass().getResourceAsStream(
             "/fourTrianglesInMixedGroups.obj"));
         
-        List<Obj> objs = ObjSplitting.splitByMaterialGroups(obj);
+        Map<String, Obj> objs = ObjSplitting.splitByMaterialGroups(obj);
         assertEquals(4, objs.size());
     }
     
@@ -50,7 +51,7 @@ public class TestObjSplitting
         Obj obj = ObjReader.read(getClass().getResourceAsStream(
             "/square.obj"));
         
-        List<Obj> objs = ObjSplitting.splitByMaterialGroups(obj);
+        Map<String, Obj> objs = ObjSplitting.splitByMaterialGroups(obj);
         
         // There are no material groups in the "square.obj" 
         assertEquals(0, objs.size());
@@ -63,7 +64,7 @@ public class TestObjSplitting
         Obj obj = ObjReader.read(getClass().getResourceAsStream(
             "/fourTrianglesPartiallyInMaterialGroups.obj"));
         
-        List<Obj> objs = ObjSplitting.splitByMaterialGroups(obj);
+        Map<String, Obj> objs = ObjSplitting.splitByMaterialGroups(obj);
 
         // Only two of the triangles are in material groups 
         assertEquals(2, objs.size());
