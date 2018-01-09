@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,6 +52,23 @@ class ObjSplitter
     private static final Level level = Level.FINE;
 
     /**
+     * A predicate interface, equivalent to java.util.functional.Predicate,
+     * but defined here in order to target Java 1.7
+     *
+     * @param <T> The parameter type
+     */
+    private interface Predicate<T>
+    {
+        /**
+         * Test the given object
+         * 
+         * @param t The object
+         * @return Whether this predicate applies to the object
+         */
+        boolean test(T t);
+    }
+    
+    /**
      * The predicate that will be used to check whether an OBJ should
      * be split.
      */
@@ -65,9 +81,16 @@ class ObjSplitter
      * 
      * @param maxNumVertices The maximum number of vertices
      */
-    ObjSplitter(int maxNumVertices)
+    ObjSplitter(final int maxNumVertices)
     {
-        splitPredicate = obj -> obj.getNumVertices() > maxNumVertices;
+        splitPredicate = new Predicate<ReadableObj>()
+        {
+            @Override
+            public boolean test(ReadableObj obj)
+            {
+                return obj.getNumVertices() > maxNumVertices;
+            }
+        };
     }
     
     /**
@@ -200,7 +223,7 @@ class ObjSplitter
      * @param faces The list of faces
      * @return The OBJ group
      */
-    private static ObjGroup asGroup(List<? extends ObjFace> faces)
+    private static ObjGroup asGroup(final List<? extends ObjFace> faces)
     {
         return new ObjGroup()
         {
@@ -231,7 +254,8 @@ class ObjSplitter
      * @param obj The OBJ
      * @return The predicate
      */
-    private static Predicate<ObjFace> computeFacePredicate(ReadableObj obj)
+    private static Predicate<ObjFace> computeFacePredicate(
+        final ReadableObj obj)
     {
         // Compute the projections of the centers of all faces along the axes
         float centersX[] = computeFaceCenters(obj, 0);
@@ -239,9 +263,9 @@ class ObjSplitter
         float centersZ[] = computeFaceCenters(obj, 2);
         
         // Compute the mean of the projections along the axes
-        float meanX = arithmeticMean(centersX);
-        float meanY = arithmeticMean(centersY);
-        float meanZ = arithmeticMean(centersZ);
+        final float meanX = arithmeticMean(centersX);
+        final float meanY = arithmeticMean(centersY);
+        final float meanZ = arithmeticMean(centersZ);
         
         // Compute the variances of the projections
         float varianceX = variance(centersX, meanX);
@@ -252,24 +276,36 @@ class ObjSplitter
         // relative to the mean, along the axis with the largest variance
         if (varianceX >= varianceY && varianceX >= varianceZ)
         {
-            return objFace -> 
+            return new Predicate<ObjFace>()
             {
-                float faceCenterX = computeFaceCenter(obj, objFace, 0);
-                return faceCenterX >= meanX;
+                @Override
+                public boolean test(ObjFace objFace)
+                {
+                    float faceCenterX = computeFaceCenter(obj, objFace, 0);
+                    return faceCenterX >= meanX;
+                }
             };
         }
         if (varianceY >= varianceX && varianceY >= varianceZ)
         {
-            return objFace -> 
+            return new Predicate<ObjFace>()
             {
-                float faceCenterY = computeFaceCenter(obj, objFace, 1);
-                return faceCenterY >= meanY;
+                @Override
+                public boolean test(ObjFace objFace)
+                {
+                    float faceCenterY = computeFaceCenter(obj, objFace, 1);
+                    return faceCenterY >= meanY;
+                }
             };
         }
-        return objFace -> 
+        return new Predicate<ObjFace>()
         {
-            float faceCenterZ = computeFaceCenter(obj, objFace, 2);
-            return faceCenterZ >= meanZ;
+            @Override
+            public boolean test(ObjFace objFace)
+            {
+                float faceCenterZ = computeFaceCenter(obj, objFace, 2);
+                return faceCenterZ >= meanZ;
+            }
         };
         
     }
