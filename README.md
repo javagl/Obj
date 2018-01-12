@@ -90,7 +90,7 @@ from the `ReadableObj` object, and each of them can be converted into a new
 The `ObjSplitting` class contains a convenience method for this:
 
     Obj obj = ObjReader.read(...);
-    List<Obj> mtlObjs = ObjSplitting.splitByMaterialGroups(obj);;
+    Map<String, Obj> mtlObjs = ObjSplitting.splitByMaterialGroups(obj);;
 
 Each of these `Obj` objects may then be converted into a renderable OBJ,
 using the `ObjUtils.convertToRenderable` method as described above, 
