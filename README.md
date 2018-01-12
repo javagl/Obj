@@ -5,10 +5,10 @@ Maven dependency:
     <dependency>
       <groupId>de.javagl</groupId>
       <artifactId>obj</artifactId>
-      <version>0.2.1</version>
+      <version>0.3.0</version>
     </dependency>
     
-Direct JAR link: [https://oss.sonatype.org/content/repositories/releases/de/javagl/obj/0.2.1/obj-0.2.1.jar](https://oss.sonatype.org/content/repositories/releases/de/javagl/obj/0.2.1/obj-0.2.1.jar)
+Direct JAR link: [https://oss.sonatype.org/content/repositories/releases/de/javagl/obj/0.3.0/obj-0.3.0.jar](https://oss.sonatype.org/content/repositories/releases/de/javagl/obj/0.3.0/obj-0.3.0.jar)
 
 # Samples
 
@@ -146,7 +146,7 @@ part with WebGL or OpenGL ES 2.0, the following code can be used:
 
 # Change log
 
-**0.2.2-SNAPSHOT**
+**0.3.0** (2018-01-12)
 
 - Added `ObjSplitting` class for splitting OBJs
 - Added `ObjData#convertToShortBuffer` method
