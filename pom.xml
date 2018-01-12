@@ -10,7 +10,7 @@
 
     <groupId>de.javagl</groupId>
     <artifactId>obj</artifactId>
-    <version>0.2.2-SNAPSHOT</version>
+    <version>0.3.0-SNAPSHOT</version>
 
     <name>obj</name>
     <url>https://github.com/javagl</url>
@@ -92,6 +92,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <description>A simple Wavefront OBJ file loader and writer</description>
 </project>
