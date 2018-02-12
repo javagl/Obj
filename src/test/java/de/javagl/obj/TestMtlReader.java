@@ -27,5 +27,41 @@ public class TestMtlReader
         assertEquals("texture.png", mtls.get(1).getMapKd());
     }
     
-    
+    @Test
+    public void readMtlWithWhitespace()
+        throws IOException
+    {
+        List<Mtl> mtls = MtlReader.read(getClass().getResourceAsStream(
+            "/mtlWithWhitespace.mtl"));
+
+        assertEquals(1, mtls.size());
+
+        Mtl mtl = mtls.get(0);
+        assertEquals("material0", mtl.getName());
+        assertEquals(new DefaultFloatTuple(1,0,0), mtl.getKa());
+        assertEquals(new DefaultFloatTuple(1,1,0), mtl.getKd());
+        assertEquals(new DefaultFloatTuple(1,1,1), mtl.getKs());
+        assertEquals(500, mtl.getNs(), 1e-6f);
+        assertEquals(1.0f, mtl.getD(), 1e-6f);
+        assertEquals("texture.png", mtl.getMapKd());
+    }
+
+    @Test
+    public void readMtlWithBrokenLines()
+        throws IOException
+    {
+        List<Mtl> mtls = MtlReader.read(getClass().getResourceAsStream(
+            "/mtlWithBrokenLines.mtl"));
+
+        assertEquals(1, mtls.size());
+
+        Mtl mtl = mtls.get(0);
+        assertEquals("material0", mtl.getName());
+        assertEquals(new DefaultFloatTuple(1,0,0), mtl.getKa());
+        assertEquals(new DefaultFloatTuple(1,1,0), mtl.getKd());
+        assertEquals(new DefaultFloatTuple(1,1,1), mtl.getKs());
+        assertEquals(500, mtl.getNs(), 1e-6f);
+        assertEquals(123.0f, mtl.getD(), 1e-6f);
+        assertEquals("texture.png", mtl.getMapKd());
+    }
 }

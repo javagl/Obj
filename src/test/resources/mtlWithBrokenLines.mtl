@@ -1,0 +1,11 @@
+# Some lines are broken with a backslash
+newmtl material0    
+Ka 1.0 \
+   0.0 \
+   0.0
+Kd 1.0 1.0 0.0
+Ks 1.0 1.0 1.0
+Ns 500.0
+map_Kd texture.png
+d \
+   123.0
