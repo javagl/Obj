@@ -27,6 +27,8 @@
 
 package de.javagl.obj;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -134,6 +136,9 @@ final class DefaultObj implements Obj
      * The name of the material group that is currently active
      */
     private String activeMaterialGroupName = null;
+
+    /** The 3d bounding rectangle. */
+    private Rect3D mRect3D = null;
 
     /**
      * Creates a new, empty DefaultObj.
@@ -271,6 +276,12 @@ final class DefaultObj implements Obj
     {
         Objects.requireNonNull(vertex, "The vertex is null");
         vertices.add(vertex);
+        if (mRect3D == null) {
+            mRect3D = new Rect3D(vertex.getX(), vertex.getX(), vertex.getY(), vertex.getY(), vertex.getZ(),
+                    vertex.getZ());
+        } else {
+            mRect3D = mRect3D.add(vertex);
+        }
     }
     
     @Override
@@ -431,7 +442,11 @@ final class DefaultObj implements Obj
             new ArrayList<String>(mtlFileNames));
     }
 
-    
+    @Override
+    public @Nullable Rect3D getRect3D() {
+        return mRect3D;
+    }
+
     @Override
     public String toString()
     {
