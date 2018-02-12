@@ -2,7 +2,7 @@
  * www.javagl.de - Obj
  *
  * Copyright (c) 2008-2015 Marco Hutter - http://www.javagl.de
- * 
+ *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without
@@ -11,10 +11,10 @@
  * copies of the Software, and to permit persons to whom the
  * Software is furnished to do so, subject to the following
  * conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -47,8 +47,8 @@ public class ObjReader
     /**
      * Read the OBJ data from the given stream and return it as an {@link Obj}.
      * The caller is responsible for closing the given stream.
-     * 
-     * @param inputStream The stream to read from 
+     *
+     * @param inputStream The stream to read from
      * @return The {@link Obj}
      * @throws IOException If an IO error occurs
      */
@@ -56,32 +56,32 @@ public class ObjReader
     {
         return read(inputStream, Objs.create());
     }
-    
+
     /**
      * Read the OBJ data from the given stream and store the read
      * elements in the given {@link WritableObj}.
      * The caller is responsible for closing the given stream.
-     * 
+     *
      * @param <T> The output type
-     * @param inputStream The stream to read from 
+     * @param inputStream The stream to read from
      * @param output The {@link WritableObj} to store the read data
      * @return The output
      * @throws IOException If an IO error occurs
      */
     public static <T extends WritableObj> T read(
-        InputStream inputStream, T output) 
+        InputStream inputStream, T output)
         throws IOException
     {
         BufferedReader reader = new BufferedReader(
             new InputStreamReader(inputStream, StandardCharsets.US_ASCII));
         return readImpl(reader, output);
     }
-    
+
     /**
      * Read the OBJ data from the given reader and return it as an {@link Obj}.
      * The caller is responsible for closing the given reader.
-     * 
-     * @param reader The reader to read from 
+     *
+     * @param reader The reader to read from
      * @return The {@link Obj}
      * @throws IOException If an IO error occurs
      */
@@ -89,20 +89,20 @@ public class ObjReader
     {
         return read(reader, Objs.create());
     }
-    
+
     /**
      * Read the OBJ data from the given reader and store the read
      * elements in the given {@link WritableObj}.
      * The caller is responsible for closing the given reader.
-     * 
+     *
      * @param <T> The output type
-     * @param reader The reader to read from 
+     * @param reader The reader to read from
      * @param output The {@link WritableObj} to store the read data
      * @return The output
      * @throws IOException If an IO error occurs
      */
     public static <T extends WritableObj> T read(
-        Reader reader, T output) 
+        Reader reader, T output)
         throws IOException
     {
         if (reader instanceof BufferedReader)
@@ -110,24 +110,24 @@ public class ObjReader
             return readImpl((BufferedReader)reader, output);
         }
         return readImpl(new BufferedReader(reader), output);
-        
+
     }
-    
+
     /**
      * Read the OBJ data from the given reader and store the read
      * elements in the given {@link WritableObj}.
      * The caller is responsible for closing the given reader.
-     * 
+     *
      * @param <T> The output type
-     * @param reader The reader to read from 
+     * @param reader The reader to read from
      * @param output The {@link WritableObj} to store the read data
      * @return The output
      * @throws IOException If an IO error occurs
      */
     private static <T extends WritableObj> T readImpl(
-        BufferedReader reader, T output) 
+        BufferedReader reader, T output)
         throws IOException
-    {        
+    {
         ObjFaceParser objFaceParser = new ObjFaceParser();
 
         int vertexCounter = 0;
@@ -140,6 +140,8 @@ public class ObjReader
             {
                 break;
             }
+
+            line = line.trim();
 
             //System.out.println("read line: "+line);
 
@@ -195,11 +197,11 @@ public class ObjReader
             {
                 String s = line.substring(6).trim();
                 //output.setMtlFileNames(readStrings(s));
-                // According to the OBJ specification, the "mtllib" keyword  
-                // may be followed by multiple file names, separated with 
+                // According to the OBJ specification, the "mtllib" keyword
+                // may be followed by multiple file names, separated with
                 // whitespaces:
-                // "When you assign a material library using the Model 
-                //  program, only one map library per .obj file is allowed. 
+                // "When you assign a material library using the Model
+                //  program, only one map library per .obj file is allowed.
                 //  You can assign multiple libraries using a text editor."
                 // However, to avoid problems with file names that contain
                 // whitespaces, only ONE file name is assumed here:
@@ -236,12 +238,12 @@ public class ObjReader
         }
         return output;
     }
-    
+
     /**
      * Convert the indices in the given array to be absolute (non-negative)
      * and zero-based. This means that negative values are made positive
      * by adding the given count, and positive values are decreased by one.
-     * 
+     *
      * @param array The array. If this is <code>null</code>, nothing will
      * be done
      * @param count The count
@@ -264,12 +266,12 @@ public class ObjReader
             }
         }
     }
-    
-    
+
+
     /**
      * Read all tokens from the given input string that are separated
      * by whitespaces
-     * 
+     *
      * @param input The input string
      * @return The list of tokens
      */
@@ -283,22 +285,22 @@ public class ObjReader
         }
         return tokens.toArray(new String[tokens.size()]);
     }
-    
+
     /**
      * Reads a float tuple from the given StringTokenizer
-     * 
+     *
      * @param st The StringTokenizer
      * @return The FloatTuple
      * @throws IOException If the tuple can not be read
      */
-    private static FloatTuple readFloatTuple(StringTokenizer st) 
+    private static FloatTuple readFloatTuple(StringTokenizer st)
         throws IOException
     {
         float x = parse(st.nextToken());
         if (st.hasMoreTokens())
         {
             float y = parse(st.nextToken());
-            
+
             if (st.hasMoreTokens())
             {
                 float z = parse(st.nextToken());
@@ -314,11 +316,11 @@ public class ObjReader
         }
         return FloatTuples.create(x);
     }
-    
+
     /**
-     * Parse a float from the given string, wrapping number format 
+     * Parse a float from the given string, wrapping number format
      * exceptions into an IOException
-     * 
+     *
      * @param s The string
      * @return The float
      * @throws IOException If the string does not contain a valid float value
@@ -334,7 +336,7 @@ public class ObjReader
             throw new IOException(e);
         }
     }
-    
+
     /**
      * Private constructor to prevent instantiation
      */
@@ -342,5 +344,5 @@ public class ObjReader
     {
         // Private constructor to prevent instantiation
     }
-    
+
 }
