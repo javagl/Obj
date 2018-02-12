@@ -2,7 +2,7 @@
  * www.javagl.de - Obj
  *
  * Copyright (c) 2008-2015 Marco Hutter - http://www.javagl.de
- * 
+ *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
  * files (the "Software"), to deal in the Software without
@@ -11,10 +11,10 @@
  * copies of the Software, and to permit persons to whom the
  * Software is furnished to do so, subject to the following
  * conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * A class that may read MTL data, and return the materials as a 
+ * A class that may read MTL data, and return the materials as a
  * list of {@link Mtl} objects.
  */
 public class MtlReader
@@ -45,12 +45,12 @@ public class MtlReader
      * Read the MTL data from the given stream, and return
      * it as {@link Mtl} objects.
      * The caller is responsible for closing the given stream.
-     * 
+     *
      * @param inputStream The stream to read from.
      * @return The list of Mtl object.
      * @throws IOException If an IO error occurs
      */
-    public static List<Mtl> read(InputStream inputStream) 
+    public static List<Mtl> read(InputStream inputStream)
         throws IOException
     {
         BufferedReader reader = new BufferedReader(
@@ -62,12 +62,12 @@ public class MtlReader
      * Read the MTL data from the given reader, and return
      * it as {@link Mtl} objects.
      * The caller is responsible for closing the given reader.
-     * 
+     *
      * @param reader The reader to read from.
      * @return The list of Mtl object.
      * @throws IOException If an IO error occurs
      */
-    public static List<Mtl> read(Reader reader) 
+    public static List<Mtl> read(Reader reader)
         throws IOException
     {
         if (reader instanceof BufferedReader)
@@ -76,21 +76,21 @@ public class MtlReader
         }
         return readImpl(new BufferedReader(reader));
     }
-        
+
     /**
      * Read the MTL data from the given reader, and return
      * it as {@link Mtl} objects.
      * The caller is responsible for closing the given reader.
-     * 
+     *
      * @param reader The reader to read from.
      * @return The list of Mtl object.
      * @throws IOException If an IO error occurs
      */
-    private static List<Mtl> readImpl(BufferedReader reader) 
+    private static List<Mtl> readImpl(BufferedReader reader)
         throws IOException
     {
         List<Mtl> mtlList = new ArrayList<Mtl>();
-        
+
         DefaultMtl currentMtl = null;
 
         while(true)
@@ -100,6 +100,8 @@ public class MtlReader
             {
                 break;
             }
+
+            line = line.trim();
 
             //System.out.println("read line: "+line);
 
@@ -173,11 +175,11 @@ public class MtlReader
         }
         return mtlList;
     }
-    
+
     /**
-     * Parse a float from the given string, wrapping number format 
+     * Parse a float from the given string, wrapping number format
      * exceptions into an IOException
-     * 
+     *
      * @param s The string
      * @return The float
      * @throws IOException If the string does not contain a valid float value
@@ -193,8 +195,8 @@ public class MtlReader
             throw new IOException(e);
         }
     }
-    
-    
+
+
     /**
      * Private constructor to prevent instantiation
      */
