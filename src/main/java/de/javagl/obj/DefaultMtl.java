@@ -28,46 +28,52 @@
 package de.javagl.obj;
 
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Default implementation of an Mtl (material)
  */
 final class DefaultMtl implements Mtl
 {
-    /**
-     * The name of this material
-     */
+    /** The name of this material */
     private final String name;
     
-    /**
-     * The ambient part of this material
-     */
+    /** The ambient part of this material */
     private final DefaultFloatTuple ka;
     
-    /**
-     * The diffuse part of this material
-     */
+    /** The diffuse part of this material */
     private final DefaultFloatTuple kd;
     
-    /**
-     * The specular part of this material
-     */
+    /** The specular part of this material */
     private final DefaultFloatTuple ks;
     
+    /** The shininess of this material */
+    private float ns;
+    
+    /** The opacity of this material */
+    private float d;
+
+    private TextureOptions mapKa;
+
     /**
      * The diffuse map of this material
      */
-    private String mapKd;
-    
-    /**
-     * The shininess of this material
-     */
-    private float ns;
-    
-    /**
-     * The opacity of this material
-     */
-    private float d;
+    private TextureOptions mapKd = null;
+
+    private TextureOptions mapKs = null;
+
+    private TextureOptions mapNs = null;
+
+    private TextureOptions mapD = null;
+
+    private TextureOptions mapBump = null;
+
+    private TextureOptions mapDisp = null;
+
+    private TextureOptions mapDecal = null;
+
+    private IlluminationMode mIlluminationMode = IlluminationMode.COLOR_ON_AMBIENT_OFF;
 
     /**
      * Creates a new material with the given name
@@ -134,18 +140,6 @@ final class DefaultMtl implements Mtl
     }
 
     @Override
-    public void setMapKd(String mapKd)
-    {
-        this.mapKd = mapKd;
-    }
-
-    @Override
-    public String getMapKd()
-    {
-        return mapKd;
-    }
-
-    @Override
     public void setNs(float ns)
     {
        this.ns = ns;
@@ -170,16 +164,117 @@ final class DefaultMtl implements Mtl
     }
 
     @Override
-    public String toString()
+    public void setMapKd(TextureOptions mapKd)
     {
-        return "Mtl[" +
-       		"name=" + name + "," +
-       		"ka=" + ka + "," +
-       		"kd=" + kd + "," +
-            "ks=" + ks + "," +
-            "mapKd=" + mapKd + "," +
-            "ns=" + ns + "," +
-            "d=" + d + "]";
+        this.mapKd = mapKd;
+    }
+
+    @Override
+    public TextureOptions getMapKd()
+    {
+        return mapKd;
+    }
+
+    @Override
+    public @Nullable TextureOptions getMapKa() {
+        return mapKa;
+    }
+
+    @Override
+    public void setMapKa(@Nullable TextureOptions mapKa) {
+        this.mapKa = mapKa;
+    }
+
+    @Override
+    public @Nullable TextureOptions getMapKs() {
+        return mapKs;
+    }
+
+    @Override
+    public void setMapKs(@Nullable TextureOptions mapKs) {
+        this.mapKs = mapKs;
+    }
+
+    @Override
+    public @Nullable TextureOptions getMapNs() {
+        return mapNs;
+    }
+
+    @Override
+    public void setMapNs(@Nullable TextureOptions mapNs) {
+        this.mapNs = mapNs;
+    }
+
+    @Override
+    public @Nullable TextureOptions getMapD() {
+        return mapD;
+    }
+
+    @Override
+    public void setMapD(@Nullable TextureOptions mapD) {
+        this.mapD = mapD;
+    }
+
+    @Override
+    public @Nullable TextureOptions getBumpMap() {
+        return mapBump;
+    }
+
+    @Override
+    public void setBumpMap(@Nullable TextureOptions bumpMap) {
+        this.mapBump = bumpMap;
+    }
+
+    @Override
+    public @Nullable TextureOptions getDisplacementMap() {
+        return mapDisp;
+    }
+
+    @Override
+    public void setDisplacementMap(@Nullable TextureOptions displacementMap) {
+        this.mapDisp = displacementMap;
+    }
+
+    @Override
+    public @Nullable TextureOptions getDecalMap() {
+        return mapDecal;
+    }
+
+    @Override
+    public void setDecalMap(TextureOptions decalMap) {
+        this.mapDecal = decalMap;
+    }
+
+    @Override
+    @NotNull
+    public IlluminationMode getIlluminationMode() {
+        return mIlluminationMode;
+    }
+
+    @Override
+    public void setIlluminationMode(@NotNull IlluminationMode illum) {
+        mIlluminationMode = illum;
+    }
+
+    @Override
+    public String toString() {
+        return new StringBuilder("Mtl[name=").append(name)
+                .append(",Ka=").append(ka)
+                .append(",Kd=").append(kd)
+                .append(",Ks=").append(ks)
+                .append(",Ns=").append(ns)
+                .append(",d=").append(d)
+                .append(",map_Ka=").append(mapKa)
+                .append(",map_Kd=").append(mapKd)
+                .append(",map_Ks=").append(mapKs)
+                .append(",map_Ns=").append(mapNs)
+                .append(",map_d=").append(mapD)
+                .append(",bump=").append(mapBump)
+                .append(",disp=").append(mapDisp)
+                .append(",decal=").append(mapDecal)
+                .append(",illum=").append(mIlluminationMode)
+                .append("]")
+                .toString();
     }
 
     

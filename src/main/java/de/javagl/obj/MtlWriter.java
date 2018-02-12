@@ -26,6 +26,9 @@
  */
 
 package de.javagl.obj;
+import com.google.common.annotations.VisibleForTesting;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -78,27 +81,89 @@ public class MtlWriter
      * @param writer The writer
      * @throws IOException If an IO error occurs
      */
-    private static void write(Mtl mtl, Writer writer)
-        throws IOException
-    {
-        writer.write("newmtl "+mtl.getName()+"\n");
-        writer.write("Ka "+
-            FloatTuples.createString(mtl.getKa())+"\n");
-        writer.write("Kd "+
-            FloatTuples.createString(mtl.getKd())+"\n");
-        writer.write("Ks "+
-            FloatTuples.createString(mtl.getKs())+"\n");
-        if (mtl.getMapKd() != null)
-        {
-            writer.write("map_Kd "+mtl.getMapKd()+"\n");
-        }
-        writer.write("Ns "+mtl.getNs()+"\n");
-        writer.write("d "+mtl.getD()+"\n");
-        
+    private static void write(Mtl mtl, Writer writer) throws IOException {
+        writer.write(toFileString(mtl));
         writer.flush();
     }
-    
 
+    @VisibleForTesting
+    static String toFileString(Mtl mtl) {
+        StringBuilder sb = new StringBuilder("newmtl ")
+                .append(mtl.getName()).append("\n")
+                .append("  Ka ").append(FloatTuples.createString(mtl.getKa())).append("\n")
+                .append("  Kd ").append(FloatTuples.createString(mtl.getKd())).append("\n")
+                .append("  Ks ").append(FloatTuples.createString(mtl.getKs())).append("\n")
+                .append("  Ns ").append(mtl.getNs()).append("\n")
+                .append("  d ").append(mtl.getD()).append("\n")
+                .append("  illum ").append(mtl.getIlluminationMode().getIntValue()).append("\n");
+        appendTextureOptions(sb, "map_Ka", mtl.getMapKa());
+        appendTextureOptions(sb, "map_Kd", mtl.getMapKd());
+        appendTextureOptions(sb, "map_Ks", mtl.getMapKs());
+        appendTextureOptions(sb, "map_Ns", mtl.getMapNs());
+        appendTextureOptions(sb, "map_d", mtl.getMapD());
+        appendTextureOptions(sb, "bump", mtl.getBumpMap());
+        appendTextureOptions(sb, "disp", mtl.getDisplacementMap());
+        appendTextureOptions(sb, "decal", mtl.getDecalMap());
+        return sb.toString();
+    }
+
+    private static void appendTextureOptions(StringBuilder sb, String key, @Nullable TextureOptions opt) {
+        if (opt != null) {
+            sb.append("  ").append(key).append(toFileString(opt)).append("\n");
+        }
+    }
+    
+    @VisibleForTesting
+    static String toFileString(TextureOptions opt) {
+        StringBuilder sb = new StringBuilder();
+        if (!opt.isBlenduEnabled()) {
+            sb.append(" -blendu off");
+        }
+        if (!opt.isBlendvEnabled()) {
+            sb.append(" -blendv off");
+        }
+        if (opt.getBoost() != 0f) {
+            sb.append(" -boost ").append(opt.getBoost());
+        }
+        if (opt.getMmBrightness() != 0f || opt.getMmContrast() != 1f) {
+            sb.append(" -mm ").append(opt.getMmBrightness()).append(" ").append(opt.getMmContrast());
+        }
+        if (opt.getOriginOffset().getX() != 0f ||
+                opt.getOriginOffset().getY() != 0f ||
+                opt.getOriginOffset().getZ() != 0f) {
+            sb.append(" -o ").append(opt.getOriginOffset().getX())
+                    .append(" ").append(opt.getOriginOffset().getY())
+                    .append(" ").append(opt.getOriginOffset().getZ());
+        }
+        if (opt.getScale().getX() != 1f ||
+                opt.getScale().getY() != 1f ||
+                opt.getScale().getZ() != 1f) {
+            sb.append(" -s ").append(opt.getScale().getX())
+                    .append(" ").append(opt.getScale().getY())
+                    .append(" ").append(opt.getScale().getZ());
+        }
+        if (opt.getTurbulence().getX() != 0f ||
+                opt.getTurbulence().getY() != 0f ||
+                opt.getTurbulence().getZ() != 0f) {
+            sb.append(" -t ").append(opt.getTurbulence().getX())
+                    .append(" ").append(opt.getTurbulence().getY())
+                    .append(" ").append(opt.getTurbulence().getZ());
+        }
+        if (opt.isClampEnabled()) {
+            sb.append(" -clamp on");
+        }
+        if (opt.getBumpMultiplier() != 0f) {
+            sb.append(" -bm ").append(opt.getBumpMultiplier());
+        }
+        if (opt.getImfChannel() != null) {
+            sb.append(" -imfchan ").append(opt.getImfChannel().getStringValue());
+        }
+        if (opt.getType() != null) {
+            sb.append(" -type ").append(opt.getType().getStringValue());
+        }
+        sb.append(" ").append(opt.getFileName());
+        return sb.toString();
+    }
 
     /**
      * Private constructor to prevent instantiation

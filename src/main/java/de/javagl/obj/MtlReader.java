@@ -26,6 +26,10 @@
  */
 
 package de.javagl.obj;
+import com.google.common.annotations.VisibleForTesting;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,7 +37,6 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * A class that may read MTL data, and return the materials as a
@@ -123,57 +126,104 @@ public class MtlReader
                 break;
             }
 
-            StringTokenizer st = new StringTokenizer(line);
-            if(!st.hasMoreTokens())
-            {
-                continue;
-            }
-
-            String identifier = st.nextToken();
-            if (identifier.equalsIgnoreCase("newmtl"))
-            {
-                String name = line.substring("newmtl".length()).trim();
-                currentMtl = new DefaultMtl(name);
-                mtlList.add(currentMtl);
-            }
-            else if (identifier.equalsIgnoreCase("Ka"))
-            {
-                float ka0 = parse(st.nextToken());
-                float ka1 = parse(st.nextToken());
-                float ka2 = parse(st.nextToken());
-                currentMtl.setKa(ka0, ka1, ka2);
-            }
-            else if (identifier.equalsIgnoreCase("Ks"))
-            {
-                float ks0 = parse(st.nextToken());
-                float ks1 = parse(st.nextToken());
-                float ks2 = parse(st.nextToken());
-                currentMtl.setKs(ks0, ks1, ks2);
-            }
-            else if (identifier.equalsIgnoreCase("Kd"))
-            {
-                float kd0 = parse(st.nextToken());
-                float kd1 = parse(st.nextToken());
-                float kd2 = parse(st.nextToken());
-                currentMtl.setKd(kd0, kd1, kd2);
-            }
-            else if (identifier.equalsIgnoreCase("map_Kd"))
-            {
-                String mapKd = line.substring("map_Kd".length()).trim();
-                currentMtl.setMapKd(mapKd);
-            }
-            else if (identifier.equalsIgnoreCase("d"))
-            {
-                float d = parse(st.nextToken());
-                currentMtl.setD(d);
-            }
-            else if (identifier.equalsIgnoreCase("Ns"))
-            {
-                float ns = parse(st.nextToken());
-                currentMtl.setNs(ns);
-            }
+            currentMtl = parseLine(line, mtlList, currentMtl);
         }
         return mtlList;
+    }
+
+    @VisibleForTesting
+    @Nullable
+    static DefaultMtl parseLine(String line, List<Mtl> mtlList, @Nullable DefaultMtl currentMtl) throws IOException {
+        String[] tokens = line.split("[ \t\n\r\f]+");
+        if(tokens.length == 0) {
+            return currentMtl;
+        }
+
+        for (int i = 0; i < tokens.length; ++i) {
+            switch (tokens[i].toLowerCase()) {
+                case "newmtl": {
+                    String name = line.substring("newmtl".length()).trim();
+                    currentMtl = new DefaultMtl(name);
+                    mtlList.add(currentMtl);
+                    i = tokens.length;
+                    break;
+                }
+                case "ka": {
+                    float ka0 = parse(tokens[++i]);
+                    float ka1 = parse(tokens[++i]);
+                    float ka2 = parse(tokens[++i]);
+                    currentMtl.setKa(ka0, ka1, ka2);
+                    break;
+                }
+                case "ks": {
+                    float ks0 = parse(tokens[++i]);
+                    float ks1 = parse(tokens[++i]);
+                    float ks2 = parse(tokens[++i]);
+                    currentMtl.setKs(ks0, ks1, ks2);
+                    break;
+                }
+                case "kd": {
+                    float kd0 = parse(tokens[++i]);
+                    float kd1 = parse(tokens[++i]);
+                    float kd2 = parse(tokens[++i]);
+                    currentMtl.setKd(kd0, kd1, kd2);
+                    break;
+                }
+                case "map_ka": {
+                    currentMtl.setMapKa(readTextureOptions(tokens, ++i, null));
+                    break;
+                }
+                case "map_kd": {
+                    currentMtl.setMapKd(readTextureOptions(tokens, ++i, null));
+                    break;
+                }
+                case "map_ks": {
+                    currentMtl.setMapKs(readTextureOptions(tokens, ++i, null));
+                    break;
+                }
+                case "map_ns": {
+                    currentMtl.setMapNs(readTextureOptions(tokens, ++i, null));
+                    break;
+                }
+                case "map_d": {
+                    currentMtl.setMapD(readTextureOptions(tokens, ++i, null));
+                    break;
+                }
+                case "bump":
+                case "map_bump": {
+                    currentMtl.setBumpMap(readTextureOptions(tokens, ++i, TextureOptions.ImfChannel.LUMINANCE));
+                    break;
+                }
+                case "disp": {
+                    currentMtl.setDisplacementMap(readTextureOptions(tokens, ++i, null));
+                    break;
+                }
+                case "decal": {
+                    currentMtl.setDecalMap(readTextureOptions(tokens, ++i, TextureOptions.ImfChannel.MATTE));
+                    break;
+                }
+                case "tr": {
+                    float tr = parse(tokens[++i]);
+                    currentMtl.setD(1f - tr);
+                    break;
+                }
+                case "d": {
+                    float d = parse(tokens[++i]);
+                    currentMtl.setD(d);
+                    break;
+                }
+                case "ns": {
+                    float ns = parse(tokens[++i]);
+                    currentMtl.setNs(ns);
+                    break;
+                }
+                case "illum": {
+                    currentMtl.setIlluminationMode(Mtl.IlluminationMode.fromIntValue(parseInt(tokens[++i])));
+                    break;
+                }
+            }
+        }
+        return currentMtl;
     }
 
     /**
@@ -196,6 +246,122 @@ public class MtlReader
         }
     }
 
+    /**
+     * Parse a string as a boolean converting "true" and "on" to true, anything else to false.
+     *
+     * @param s The string to parse.
+     * @return Whether the string represents a true boolean value.
+     */
+    private static boolean parseBoolean(@NotNull String s) {
+        switch (s.toLowerCase()) {
+            case "true":
+            case "on":
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Nullable
+    private static Float parseFloatOrNull(String s) {
+        try {
+            return parse(s);
+        } catch (IOException ex) {
+            return null;
+        }
+    }
+
+    private static int parseInt(@NotNull String s) throws IOException {
+        try {
+            return Integer.parseInt(s);
+        } catch (NumberFormatException ex) {
+            throw new IOException(ex);
+        }
+    }
+
+    private static int readUpToNFloats(String[] tokens, int i, float[] out) throws IOException {
+        int numRead = 0;
+        out[numRead] = parse(tokens[i + numRead++]);
+        while (numRead < out.length) {
+            Float value = parseFloatOrNull(tokens[i + numRead]);
+            if (value == null) {
+                break;
+            }
+            out[numRead++] = value;
+        }
+        return numRead;
+    }
+
+    @VisibleForTesting
+    @NotNull
+    static TextureOptions readTextureOptions(String[] tokens, int i,
+            TextureOptions.ImfChannel defaultImfChannel) throws IOException {
+        TextureOptions.Builder builder = new TextureOptions.Builder()
+                .setImfChannel(defaultImfChannel);
+        while (i < tokens.length) {
+            switch (tokens[i++].toLowerCase()) {
+                case "-blendu": {
+                    builder.setIsBlenduEnabled(parseBoolean(tokens[i++]));
+                    break;
+                }
+                case "-blendv": {
+                    builder.setIsBlendvEnabled(parseBoolean(tokens[i++]));
+                    break;
+                }
+                case "-boost": {
+                    builder.setBoost(parse(tokens[i++]));
+                    break;
+                }
+                case "-mm": {
+                    builder.setModifyMapValues(parse(tokens[i++]), parse(tokens[i++]));
+                    break;
+                }
+                case "-o": {
+                    float[] values = new float[3];
+                    i += readUpToNFloats(tokens, i, values);
+                    builder.setOriginOffset(values[0], values[1], values[2]);
+                    break;
+                }
+                case "-s": {
+                    float[] values = new float[3];
+                    i += readUpToNFloats(tokens, i, values);
+                    builder.setScale(values[0], values[1], values[2]);
+                    break;
+                }
+                case "-t": {
+                    float[] values = new float[3];
+                    i += readUpToNFloats(tokens, i, values);
+                    builder.setTurbulence(values[0], values[1], values[2]);
+                    break;
+                }
+                case "-texres": {
+                    builder.setTextureResolution(parse(tokens[i++]));
+                    break;
+                }
+                case "-clamp": {
+                    builder.setIsClampEnabled(parseBoolean(tokens[i++]));
+                    break;
+                }
+                case "-bm": {
+                    builder.setBumpMultiplier(parse(tokens[i++]));
+                    break;
+                }
+                case "-imfchan": {
+                    builder.setImfChannel(TextureOptions.ImfChannel.fromStringValue(tokens[i++]));
+                    break;
+                }
+                case "-type": {
+                    builder.setType(TextureOptions.Type.fromStringValue(tokens[i++]));
+                    break;
+                }
+                default: {
+                    builder.setFileName(tokens[i - 1]);
+                    break;
+                }
+            }
+        }
+        return builder.build();
+    }
 
     /**
      * Private constructor to prevent instantiation

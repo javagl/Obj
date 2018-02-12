@@ -27,6 +27,9 @@
 
 package de.javagl.obj;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * An in-memory representation of an MTL file. The data represented by this 
  * interface is:
@@ -99,19 +102,124 @@ public interface Mtl
     void setKd(float kd0, float kd1, float kd2);
     
     /**
-     * Returns the name of the diffuse map of the material,
-     * or null if it has not map.
+     * Returns the diffuse map options of the material, or null if it has no map.
      * 
-     * @return The name of the diffuse map of the material
+     * @return The diffuse texture map.
      */
-    String getMapKd();
+    @Nullable
+    TextureOptions getMapKd();
 
     /**
-     * Set the diffuse map name of this material
+     * Set the diffuse map options of this material
      * 
-     * @param mapKd The diffuse map name of this material
+     * @param mapKd The diffuse map options of this material
      */
-    void setMapKd(String mapKd);
+    void setMapKd(@Nullable TextureOptions mapKd);
+
+    /**
+     * Get the ambient map options of this material, or null if it has no map.
+     *
+     * @return The ambient texture map.
+     */
+    @Nullable
+    TextureOptions getMapKa();
+
+    /**
+     * Sets the ambient map options of this material.
+     *
+     * @param mapKa The ambient map options of this material.
+     */
+    void setMapKa(@Nullable TextureOptions mapKa);
+
+    /**
+     * Gets the specular map options of this material, or null if it has no map.
+     *
+     * @return The specular texture map.
+     */
+    @Nullable
+    TextureOptions getMapKs();
+
+    /**
+     * Sets the specular map options of this material.
+     *
+     * @param mapKs The specular map options of this material.
+     */
+    void setMapKs(@Nullable TextureOptions mapKs);
+
+    /**
+     * Gets the specular highlight component options of this material, or null if it has no map.
+     *
+     * @return The specular highlight texture map.
+     */
+    @Nullable
+    TextureOptions getMapNs();
+
+    /**
+     * Sets the specular highlight component options of this material.
+     *
+     * @param mapNs The specular highlight options of this material.
+     */
+    void setMapNs(@Nullable TextureOptions mapNs);
+
+    /**
+     * Gets the alpha texture map options of this material, or null if it has no map.
+     *
+     * @return The alpha texture map options of this material.
+     */
+    @Nullable
+    TextureOptions getMapD();
+
+    /**
+     * Sets the alpha texture map options of this material.
+     *
+     * @param mapD The alpha texture map options of this material.
+     */
+    void setMapD(@Nullable TextureOptions mapD);
+
+    /**
+     * Gets the bump map texture options of this material, or null if it has no map.
+     *
+     * @return The bump map texture map options of this material.
+     */
+    @Nullable
+    TextureOptions getBumpMap();
+
+    /**
+     * Sets the bump map texture options of this material.
+     *
+     * @param bumpMap The bump map texture options.
+     */
+    void setBumpMap(@Nullable TextureOptions bumpMap);
+
+    /**
+     * Gets the displacement map texture options of this material, or null if it has no map.
+     *
+     * @return The displacement map of this material.
+     */
+    @Nullable
+    TextureOptions getDisplacementMap();
+
+    /**
+     * Sets the displacement map texture options of this material.
+     *
+     * @param displacementMap The new displacement map options.
+     */
+    void setDisplacementMap(@Nullable TextureOptions displacementMap);
+
+    /**
+     * Gets the stencil decal map texture options of this material, or null if it has no map.
+     *
+     * @return The decal map of this material.
+     */
+    @Nullable
+    TextureOptions getDecalMap();
+
+    /**
+     * Sets the stencil decal map texture options of this material.
+     *
+     * @param decalMap Th new decal map options.
+     */
+    void setDecalMap(TextureOptions decalMap);
     
     /**
      * Returns the shininess of the material.
@@ -140,10 +248,92 @@ public interface Mtl
      * @param d The opacity of the material
      */
     void setD(float d);
-    
 
+    /**
+     * Returns the illumination mode of the material
+     *
+     * @return The illumination mode of the material.
+     */
+    @NotNull
+    IlluminationMode getIlluminationMode();
 
+    /**
+     * Set the illumination mode of the material
+     *
+     * @param illum The illumination mode of the material.
+     */
+    void setIlluminationMode(@NotNull IlluminationMode illum);
 
+    enum IlluminationMode {
+        COLOR_ON_AMBIENT_OFF,
+        COLOR_ON_AMBIENT_ON,
+        HIGHLIGHT_ON,
+        REFLECTION_ON_RAY_TRACE_ON,
+        TRANSPARENCY_GLASS_ON_REFLECTION_RAY_TRACE_ON,
+        REFLECTION_FRESNEL_ON_RAY_TRACE_ON,
+        TRANSPARENCY_REFRACTION_ON_REFLECTION_FRESNEL_OFF_RAY_TRACE_ON,
+        TRANSPARENCY_REFRACTION_ON_REFLECTION_FRESNEL_ON_RAY_TRACE_ON,
+        REFLECTION_ON_RAY_TRACE_OFF,
+        TRANSPARENCY_GLASS_ON_REFLECTION_RAY_TRACE_OFF,
+        SHADOW_ON_INVISIBLE_SURFACES;
 
+        public int getIntValue() {
+            switch (this) {
+                case COLOR_ON_AMBIENT_OFF:
+                    return 0;
+                case COLOR_ON_AMBIENT_ON:
+                    return 1;
+                case HIGHLIGHT_ON:
+                    return 2;
+                case REFLECTION_ON_RAY_TRACE_ON:
+                    return 3;
+                case TRANSPARENCY_GLASS_ON_REFLECTION_RAY_TRACE_ON:
+                    return 4;
+                case REFLECTION_FRESNEL_ON_RAY_TRACE_ON:
+                    return 5;
+                case TRANSPARENCY_REFRACTION_ON_REFLECTION_FRESNEL_OFF_RAY_TRACE_ON:
+                    return 6;
+                case TRANSPARENCY_REFRACTION_ON_REFLECTION_FRESNEL_ON_RAY_TRACE_ON:
+                    return 7;
+                case REFLECTION_ON_RAY_TRACE_OFF:
+                    return 8;
+                case TRANSPARENCY_GLASS_ON_REFLECTION_RAY_TRACE_OFF:
+                    return 9;
+                case SHADOW_ON_INVISIBLE_SURFACES:
+                    return 10;
+                default:
+                    throw new IllegalStateException("Illumination mode not recognized");
+            }
+        }
+
+        static IlluminationMode fromIntValue(int illum) {
+            switch (illum) {
+                case 0:
+                    return COLOR_ON_AMBIENT_OFF;
+                case 1:
+                    return COLOR_ON_AMBIENT_ON;
+                case 2:
+                    return HIGHLIGHT_ON;
+                case 3:
+                    return REFLECTION_ON_RAY_TRACE_ON;
+                case 4:
+                    return TRANSPARENCY_GLASS_ON_REFLECTION_RAY_TRACE_ON;
+                case 5:
+                    return REFLECTION_FRESNEL_ON_RAY_TRACE_ON;
+                case 6:
+                    return TRANSPARENCY_REFRACTION_ON_REFLECTION_FRESNEL_OFF_RAY_TRACE_ON;
+                case 7:
+                    return TRANSPARENCY_REFRACTION_ON_REFLECTION_FRESNEL_ON_RAY_TRACE_ON;
+                case 8:
+                    return REFLECTION_ON_RAY_TRACE_OFF;
+                case 9:
+                    return TRANSPARENCY_GLASS_ON_REFLECTION_RAY_TRACE_OFF;
+                case 10:
+                    return SHADOW_ON_INVISIBLE_SURFACES;
+                default:
+                    throw new IllegalArgumentException("Unknown illumination mode: " + illum);
+            }
+        }
+    }
     
 }
