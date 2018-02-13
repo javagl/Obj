@@ -147,4 +147,17 @@ public class Rect3D {
                 zMin == other.zMin &&
                 zMax == other.zMax;
     }
+
+    @Override
+    public String toString() {
+        return new StringBuilder("Rect3D[")
+                .append("xMin=").append(xMin)
+                .append("xMax=").append(xMax)
+                .append("yMin=").append(yMin)
+                .append("yMax=").append(yMax)
+                .append("zMin=").append(zMin)
+                .append("zMax=").append(zMax)
+                .append("]")
+                .toString();
+    }
 }
