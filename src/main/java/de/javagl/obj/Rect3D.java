@@ -11,15 +11,15 @@ public class Rect3D {
     public final float zMin;
     public final float zMax;
 
-    private float mWidthX = Float.NaN;
-    private float mWidthY = Float.NaN;
-    private float mWidthZ = Float.NaN;
+    private Float mWidthX = null;
+    private Float mWidthY = null;
+    private Float mWidthZ = null;
 
-    private float mCenterX = Float.NaN;
-    private float mCenterY = Float.NaN;
-    private float mCenterZ = Float.NaN;
+    private Float mCenterX = null;
+    private Float mCenterY = null;
+    private Float mCenterZ = null;
 
-    private float mDiagonalLength = Float.NaN;
+    private Float mDiagonalLength = null;
 
     public Rect3D(float xMin, float xMax, float yMin, float yMax, float zMin, float zMax) {
         this.xMin = xMin;
@@ -31,49 +31,49 @@ public class Rect3D {
     }
 
     public float getWidthX() {
-        if (mWidthX == Float.NaN) {
+        if (mWidthX == null) {
             mWidthX = xMax - xMin;
         }
         return mWidthX;
     }
 
     public float getWidthY() {
-        if (mWidthY == Float.NaN) {
+        if (mWidthY == null) {
             mWidthY = yMax - yMin;
         }
         return mWidthY;
     }
 
     public float getWidthZ() {
-        if (mWidthZ == Float.NaN) {
+        if (mWidthZ == null) {
             mWidthZ = zMax - zMin;
         }
         return mWidthZ;
     }
 
     public float getCenterX() {
-        if (mCenterX == Float.NaN) {
+        if (mCenterX == null) {
             mCenterX = xMin + getWidthX() / 2f;
         }
         return mCenterX;
     }
 
     public float getCenterY() {
-        if (mCenterY == Float.NaN) {
+        if (mCenterY == null) {
             mCenterY = yMin + getWidthY() / 2f;
         }
         return mCenterY;
     }
 
     public float getCenterZ() {
-        if (mCenterZ == Float.NaN) {
+        if (mCenterZ == null) {
             mCenterZ = zMin + getWidthZ() / 2f;
         }
         return mCenterZ;
     }
 
     public float getDiagonalLength() {
-        if (mDiagonalLength == Float.NaN) {
+        if (mDiagonalLength == null) {
             mDiagonalLength = (float) Math.sqrt(
                     getWidthX() * getWidthX() + getWidthY() * getWidthY() + getWidthZ() * getWidthZ());
         }
