@@ -109,6 +109,22 @@ public class Rect3D {
         return add(tuple.getX(), tuple.getY(), tuple.getZ());
     }
 
+    public Rect3D add(Rect3D other) {
+        if (contains(other.xMin, other.yMin, other.zMin) &&
+                contains(other.xMin, other.yMin, other.zMax) &&
+                contains(other.xMin, other.yMax, other.zMin) &&
+                contains(other.xMin, other.yMax, other.zMax) &&
+                contains(other.xMax, other.yMin, other.zMin) &&
+                contains(other.xMax, other.yMin, other.zMax) &&
+                contains(other.xMax, other.yMax, other.zMin) &&
+                contains(other.xMax, other.yMax, other.zMax)) {
+            return this;
+        }
+        return new Rect3D(Math.min(xMin, other.xMin), Math.max(xMax, other.xMax),
+                Math.min(yMin, other.yMin), Math.max(yMax, other.yMax),
+                Math.min(zMin, other.zMin), Math.max(zMax, other.zMax));
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(xMin, xMax, yMin, yMax, zMin, zMax);
