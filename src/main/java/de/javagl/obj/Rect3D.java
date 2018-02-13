@@ -4,16 +4,20 @@ import java.util.Objects;
 
 public class Rect3D {
 
-    final float xMin;
-    final float xMax;
-    final float yMin;
-    final float yMax;
-    final float zMin;
-    final float zMax;
+    public final float xMin;
+    public final float xMax;
+    public final float yMin;
+    public final float yMax;
+    public final float zMin;
+    public final float zMax;
 
     private float mWidthX = Float.NaN;
     private float mWidthY = Float.NaN;
     private float mWidthZ = Float.NaN;
+
+    private float mCenterX = Float.NaN;
+    private float mCenterY = Float.NaN;
+    private float mCenterZ = Float.NaN;
 
     private float mDiagonalLength = Float.NaN;
 
@@ -45,6 +49,27 @@ public class Rect3D {
             mWidthZ = zMax - zMin;
         }
         return mWidthZ;
+    }
+
+    public float getCenterX() {
+        if (mCenterX == Float.NaN) {
+            mCenterX = xMin + getWidthX() / 2f;
+        }
+        return mCenterX;
+    }
+
+    public float getCenterY() {
+        if (mCenterY == Float.NaN) {
+            mCenterY = yMin + getWidthY() / 2f;
+        }
+        return mCenterY;
+    }
+
+    public float getCenterZ() {
+        if (mCenterZ == Float.NaN) {
+            mCenterZ = zMin + getWidthZ() / 2f;
+        }
+        return mCenterZ;
     }
 
     public float getDiagonalLength() {
