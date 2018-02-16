@@ -92,7 +92,21 @@ public class FloatTuples
         return new DefaultFloatTuple(x, y, z, w);
     }
     
-    
+    /**
+     * Create a new {@link FloatTuple} from the given coordinates, normalized
+     * to have a Euclidean length of 1.0.
+     *
+     * @param x The x-coordinate
+     * @param y The y-coordinate
+     * @param z The z-coordinate
+     * @return The {@link FloatTuple}
+     */
+    static FloatTuple createNormalized(float x, float y, float z)
+    {
+        float invLength = (float)(1.0 / Math.sqrt(x * x + y * y + z * z));
+        return create(x * invLength, y * invLength, z * invLength);
+    }
+
     /**
      * Returns the string for the given tuple that is used for representing
      * the given tuple in an OBJ file

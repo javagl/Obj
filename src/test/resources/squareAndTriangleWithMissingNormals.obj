@@ -1,0 +1,15 @@
+# Using slightly non-planar vertices to avoid 
+# re-using the only normal (0,0,1)
+ 
+v 0.0 0.0 0.0455
+v 4.0 0.0 0.0344
+v 4.0 4.0 0.0254
+v 0.0 4.0 0.0144
+v 2.0 6.0 0.0534
+
+vn 0.033 0.021 1.0
+vn 0.023 0.041 1.0
+vn 0.066 0.032 1.0 
+
+f 1 2 3 4
+f 3//1 4//2 5//3

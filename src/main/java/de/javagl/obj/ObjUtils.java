@@ -155,7 +155,57 @@ public class ObjUtils
         return output;
     }
     
-    
+    /**
+     * Computes normals for the given {@link ReadableObj} and returns the
+     * result.<br>
+     * <br>
+     * This method will make sure that all faces
+     * {@link ObjFace#containsNormalIndices() contain normal indices}.
+     * If a face already contains normal indices, it will remain unchanged.
+     * Otherwise, vertex normals will be added to the output, and the
+     * corresponding indices for these normals will be assigned to the
+     * face.<br>
+     * <br>
+     * The vertex normals will be computed as the normalized sum of the
+     * normals of all faces that are adjacent to the respective vertex.
+     * If the vertex does not have any adjacent face with at least
+     * 3 vertices, then the resulting vertex normal will be (0,0,0).
+     *
+     * @param input The input {@link ReadableObj}
+     * @return The resulting {@link Obj}
+     */
+    public static Obj addComputedNormals(ReadableObj input)
+    {
+        return addComputedNormals(input, Objs.create());
+    }
+
+    /**
+     * Computes normals for the given {@link ReadableObj} and writes
+     * the result to the given {@link WritableObj}.<br>
+     * <br>
+     * This method will make sure that all faces
+     * {@link ObjFace#containsNormalIndices() contain normal indices}.
+     * If a face already contains normal indices, it will remain unchanged.
+     * Otherwise, vertex normals will be added to the output, and the
+     * corresponding indices for these normals will be assigned to the
+     * face.<br>
+     * <br>
+     * The vertex normals will be computed as the normalized sum of the
+     * normals of all faces that are adjacent to the respective vertex.
+     * If the vertex does not have any adjacent face with at least
+     * 3 vertices, then the resulting vertex normal will be (0,0,0).
+     *
+     * @param <T> The type of the output
+     * @param input The input {@link ReadableObj}
+     * @param output The output {@link WritableObj}
+     * @return The given output
+     */
+    public static <T extends WritableObj> T addComputedNormals(
+        ReadableObj input, T output)
+    {
+        return ObjNormals.addComputedNormals(input, output);
+    }
+
     /**
      * Returns the given group of the given {@link ReadableObj} as a new
      * {@link Obj}.<br>
@@ -568,7 +618,7 @@ public class ObjUtils
      * @param input The {@link ReadableObj}
      * @param output The {@link WritableObj}
      */
-    private static void addAll(ReadableObj input, WritableObj output)
+    static void addAll(ReadableObj input, WritableObj output)
     {
         for (int i=0; i<input.getNumVertices(); i++)
         {
@@ -756,7 +806,7 @@ public class ObjUtils
      * @param face The {@link ObjFace} to perform the activation for
      * @param output The output {@link WritableObj} 
      */
-    private static void activateGroups(
+    static void activateGroups(
         ReadableObj input, ObjFace face, WritableObj output)
     {
         Set<String> activatedGroupNames = 
