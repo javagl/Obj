@@ -436,7 +436,7 @@ public class ObjData
      * vertices per face is known and equal for all faces, with 
      * <code>n = obj.getNumFaces() * numVerticesPerFace</code>.<br>
      * <br>
-     * This method assumes that the faces contain texture coordinate indices.
+     * This method assumes that the faces contain normal indices.
      * 
      * 
      * @param obj The {@link ReadableObj}
