@@ -146,6 +146,13 @@ part with WebGL or OpenGL ES 2.0, the following code can be used:
 
 # Change log
 
+**0.3.1-SNAPSHOT**
+
+- Updated MTL handling to support additional options.
+  - **API change**: The `Mtl#get...` methods may now return `null` when
+    no information was parsed from the input file
+
+
 **0.3.0** (2018-01-12)
 
 - Added `ObjSplitting` class for splitting OBJs

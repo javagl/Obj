@@ -1,0 +1,24 @@
+newmtl material0
+illum 3
+Ns 500.0
+Ni 2.3
+d 1.0
+Ka 1.0 1.0 1.0
+Kd 1.0 0.0 1.0
+Ks 1.0 1.0 1.0
+Tf 0.0 1.0 0.0
+sharpness 100.0
+map_Ka -blendu off -blendv on -mm 2.3 4.5 -clamp on ambient.png
+map_Kd -texres 512.0 diffuse.png
+map_Ks -o 0.1 0.2 0.3 -s 1.1 1.2 1.3 -t 0.1 0.2 0.3 specularReflectivity.png
+map_Ns -o 0.1 0.2 0.3 -s 1.1 1.2 1.3 specularExponent.png
+map_d -mm 0.2 0.8 opacity.png
+bump -imfchan -bm bump.png
+disp displacement.png
+decal decal.png
+refl -type cube_top cubeTop.png
+refl -type cube_bottom cubeBottom.png
+refl -type cube_front cubeFront.png
+refl -type cube_back cubeBack.png
+refl -type cube_left cubeLeft.png
+refl -type cube_right cubeRight.png

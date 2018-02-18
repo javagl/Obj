@@ -16,7 +16,7 @@ import org.junit.Test;
 public class TestMtlWriter
 {
     @Test
-    public void writeMtl() 
+    public void writeMtl()
         throws IOException
     {
         String inputString = readResourceAsString(
@@ -27,21 +27,39 @@ public class TestMtlWriter
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         MtlWriter.write(mtls, baos);
         String outputString = new String(baos.toByteArray());
-        
+
         //System.out.println(outputString);
         assertEquals(inputString, outputString);
     }
-    
+
+    @Test
+    public void writeComplexMtl()
+        throws IOException
+    {
+        String inputString = readResourceAsString(
+            "/complexMaterial.mtl");
+        List<Mtl> mtls = MtlReader.read(
+            new ByteArrayInputStream(inputString.getBytes()));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        MtlWriter.write(mtls, baos);
+        String outputString = new String(baos.toByteArray());
+
+        //System.out.println(outputString);
+        assertEquals(inputString, outputString);
+    }
+
+
     private static String readResourceAsString(String name)
     {
-        InputStream inputStream = 
+        InputStream inputStream =
             TestObjWriter.class.getResourceAsStream(name);
         String string = readAsString(inputStream);
         string = string.replaceAll("\r\n", "\n");
         return string;
     }
-    
-    private static String readAsString(InputStream inputStream) 
+
+    private static String readAsString(InputStream inputStream)
     {
         try (Scanner scanner = new Scanner(inputStream))
         {
@@ -49,7 +67,7 @@ public class TestMtlWriter
             String string = scanner.next();
             return string;
         }
-    }    
-    
-    
+    }
+
+
 }

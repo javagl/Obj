@@ -32,8 +32,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.StringTokenizer;
+import java.util.Queue;
 
 /**
  * A class that may read MTL data, and return the materials as a
@@ -91,7 +93,7 @@ public class MtlReader
     {
         List<Mtl> mtlList = new ArrayList<Mtl>();
 
-        DefaultMtl currentMtl = null;
+        Mtl currentMtl = null;
 
         while(true)
         {
@@ -123,77 +125,256 @@ public class MtlReader
                 break;
             }
 
-            StringTokenizer st = new StringTokenizer(line);
-            if(!st.hasMoreTokens())
-            {
-                continue;
-            }
-
-            String identifier = st.nextToken();
-            if (identifier.equalsIgnoreCase("newmtl"))
+            line = line.trim();
+            if (line.startsWith("newmtl"))
             {
                 String name = line.substring("newmtl".length()).trim();
                 currentMtl = new DefaultMtl(name);
                 mtlList.add(currentMtl);
             }
-            else if (identifier.equalsIgnoreCase("Ka"))
+            else if (!line.startsWith("#") && !line.isEmpty())
             {
-                float ka0 = parse(st.nextToken());
-                float ka1 = parse(st.nextToken());
-                float ka2 = parse(st.nextToken());
-                currentMtl.setKa(ka0, ka1, ka2);
-            }
-            else if (identifier.equalsIgnoreCase("Ks"))
-            {
-                float ks0 = parse(st.nextToken());
-                float ks1 = parse(st.nextToken());
-                float ks2 = parse(st.nextToken());
-                currentMtl.setKs(ks0, ks1, ks2);
-            }
-            else if (identifier.equalsIgnoreCase("Kd"))
-            {
-                float kd0 = parse(st.nextToken());
-                float kd1 = parse(st.nextToken());
-                float kd2 = parse(st.nextToken());
-                currentMtl.setKd(kd0, kd1, kd2);
-            }
-            else if (identifier.equalsIgnoreCase("map_Kd"))
-            {
-                String mapKd = line.substring("map_Kd".length()).trim();
-                currentMtl.setMapKd(mapKd);
-            }
-            else if (identifier.equalsIgnoreCase("d"))
-            {
-                float d = parse(st.nextToken());
-                currentMtl.setD(d);
-            }
-            else if (identifier.equalsIgnoreCase("Ns"))
-            {
-                float ns = parse(st.nextToken());
-                currentMtl.setNs(ns);
+                if (currentMtl == null)
+                {
+                    throw new IOException(
+                        "Missing newmtl statement before " + line);
+                }
+                processLine(currentMtl, line);
             }
         }
         return mtlList;
     }
 
     /**
-     * Parse a float from the given string, wrapping number format
-     * exceptions into an IOException
+     * Process one (trimmed) line that is part of a <code>newmtl</code>
+     * material definition, and write the result into the given {@link Mtl}.
      *
-     * @param s The string
-     * @return The float
-     * @throws IOException If the string does not contain a valid float value
+     * @param mtl The {@link Mtl}
+     * @param line The line
+     * @throws IOException If an IO error occurs
      */
-    private static float parse(String s) throws IOException
+    private static void processLine(Mtl mtl, String line)
+        throws IOException
     {
-        try
+        Queue<String> tokens =
+            new LinkedList<String>(Arrays.asList(line.split("[ \t\n\r\f]+")));
+        String command = tokens.poll();
+
+        // Illumination mode
+        if (command.equalsIgnoreCase("illum"))
         {
-            return Float.parseFloat(s);
+            int value = Utils.parseInt(tokens.poll());
+            mtl.setIllum(value);
         }
-        catch (NumberFormatException e)
+
+        // Color values: R, and optional G and B
+        if (command.equalsIgnoreCase("Ka"))
         {
-            throw new IOException(e);
+            Float[] values = Utils.parseFloats(tokens, 3);
+            mtl.setKa(values[0], values[1], values[2]);
         }
+        else if (command.equalsIgnoreCase("Kd"))
+        {
+            Float[] values = Utils.parseFloats(tokens, 3);
+            mtl.setKd(values[0], values[1], values[2]);
+        }
+        else if (command.equalsIgnoreCase("Ks"))
+        {
+            Float[] values = Utils.parseFloats(tokens, 3);
+            mtl.setKs(values[0], values[1], values[2]);
+        }
+        else if (command.equalsIgnoreCase("Tf"))
+        {
+            Float[] values = Utils.parseFloats(tokens, 3);
+            mtl.setTf(values[0], values[1], values[2]);
+        }
+
+        // Single float values
+        else if (command.equalsIgnoreCase("Tr"))
+        {
+            float value = Utils.parseFloat(tokens.poll());
+            mtl.setD(1.0f - value);
+        }
+        else if (command.equalsIgnoreCase("sharpness"))
+        {
+            float value = Utils.parseFloat(tokens.poll());
+            mtl.setSharpness(value);
+        }
+        else if (command.equalsIgnoreCase("d"))
+        {
+            String token = tokens.peek();
+            if ("-halo".equals(token))
+            {
+                mtl.setHalo(true);
+                tokens.poll();
+            }
+            float value = Utils.parseFloat(tokens.poll());
+            mtl.setD(value);
+        }
+        else if (command.equalsIgnoreCase("Ni"))
+        {
+            float value = Utils.parseFloat(tokens.poll());
+            mtl.setNi(value);
+        }
+        else if (command.equalsIgnoreCase("Ns"))
+        {
+            float value = Utils.parseFloat(tokens.poll());
+            mtl.setNs(value);
+        }
+
+        // Texture map definitions
+        else
+        {
+            readTextureMap(mtl, command, tokens);
+        }
+    }
+
+    /**
+     * Process the line of an MTL file that is supposed to contain a
+     * texture map definition, and write the resulting texture
+     * information into the given {@link Mtl}.<br>
+     * <br>
+     * The texture definition will be determined from the given command,
+     * which may, for example, be <code>"map_Ka"</code> or
+     * <code>"refl"</code>
+     *
+     * @param mtl The {@link Mtl}
+     * @param command The command at the beginning of the line
+     * @param tokens The tokens that have been created from the line
+     * @throws IOException If an IO error occurs
+     */
+    private static void readTextureMap(
+        Mtl mtl, String command, Queue<String> tokens)
+            throws IOException
+    {
+        if (command.equalsIgnoreCase("map_Ka"))
+        {
+            mtl.setMapKaOptions(readTextureOptions(tokens));
+        }
+        else if (command.equalsIgnoreCase("map_Kd"))
+        {
+            mtl.setMapKdOptions(readTextureOptions(tokens));
+        }
+        else if (command.equalsIgnoreCase("map_Ks"))
+        {
+            mtl.setMapKsOptions(readTextureOptions(tokens));
+        }
+        else if (command.equalsIgnoreCase("map_d"))
+        {
+            mtl.setMapDOptions(readTextureOptions(tokens));
+        }
+        else if (command.equalsIgnoreCase("map_Ns"))
+        {
+            mtl.setMapNsOptions(readTextureOptions(tokens));
+        }
+        else if (command.equalsIgnoreCase("bump")
+            || command.equalsIgnoreCase("map_bump"))
+        {
+            mtl.setBumpOptions(readTextureOptions(tokens));
+        }
+        else if (command.equalsIgnoreCase("disp"))
+        {
+            mtl.setDispOptions(readTextureOptions(tokens));
+        }
+        else if (command.equalsIgnoreCase("decal"))
+        {
+            mtl.setDecalOptions(readTextureOptions(tokens));
+        }
+        else if (command.equalsIgnoreCase("refl"))
+        {
+            TextureOptions refl = readTextureOptions(tokens);
+            mtl.getReflOptions().add(refl);
+        }
+    }
+
+
+    /**
+     * Process the tokens in the given queue and construct a
+     * {@link TextureOptions} object from them
+     *
+     * @param tokens The input token
+     * @return The {@link TextureOptions}
+     * @throws IOException If an IO error occurs
+     */
+    static TextureOptions readTextureOptions(Queue<String> tokens)
+        throws IOException {
+
+        DefaultTextureOptions textureOptions = new DefaultTextureOptions();
+        while (!tokens.isEmpty())
+        {
+            String optionName = tokens.poll();
+            if (optionName.equalsIgnoreCase("-blendu"))
+            {
+                boolean value = Utils.parseBoolean(tokens.poll());
+                textureOptions.setBlendu(value);
+            }
+            else if (optionName.equalsIgnoreCase("-blendv"))
+            {
+                boolean value = Utils.parseBoolean(tokens.poll());
+                textureOptions.setBlendv(value);
+            }
+            else if (optionName.equalsIgnoreCase("-boost"))
+            {
+                float value = Utils.parseFloat(tokens.poll());
+                textureOptions.setBoost(value);
+            }
+            else if (optionName.equalsIgnoreCase("-cc"))
+            {
+                boolean value = Utils.parseBoolean(tokens.poll());
+                textureOptions.setCc(value);
+            }
+            else if (optionName.equalsIgnoreCase("-mm"))
+            {
+                float base = Utils.parseFloat(tokens.poll());
+                float gain = Utils.parseFloat(tokens.poll());
+                textureOptions.setMm(base, gain);
+            }
+            else if (optionName.equalsIgnoreCase("-o"))
+            {
+                Float[] values = Utils.parseFloats(tokens, 3);
+                textureOptions.setO(values[0], values[1], values[2]);
+            }
+            else if (optionName.equalsIgnoreCase("-s"))
+            {
+                Float[] values = Utils.parseFloats(tokens, 3);
+                textureOptions.setS(values[0], values[1], values[2]);
+            }
+            else if (optionName.equalsIgnoreCase("-t"))
+            {
+                Float[] values = Utils.parseFloats(tokens, 3);
+                textureOptions.setT(values[0], values[1], values[2]);
+            }
+            else if (optionName.equalsIgnoreCase("-texres"))
+            {
+                float value = Utils.parseFloat(tokens.poll());
+                textureOptions.setTexres(value);
+            }
+            else if (optionName.equalsIgnoreCase("-clamp"))
+            {
+                boolean value = Utils.parseBoolean(tokens.poll());
+                textureOptions.setClamp(value);
+            }
+            else if (optionName.equalsIgnoreCase("-bm"))
+            {
+                float value = Utils.parseFloat(tokens.poll());
+                textureOptions.setBm(value);
+            }
+            else if (optionName.equalsIgnoreCase("-imfchan"))
+            {
+                String value = tokens.poll();
+                textureOptions.setImfchan(value);
+            }
+            else if (optionName.equalsIgnoreCase("-type"))
+            {
+                String value = tokens.poll();
+                textureOptions.setType(value);
+            }
+            else
+            {
+                textureOptions.setFileName(optionName);
+            }
+        }
+        return textureOptions;
     }
 
 

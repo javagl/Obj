@@ -174,21 +174,21 @@ public class ObjReader
             // v: Vertex coordinates
             if(identifier.equals("v"))
             {
-                output.addVertex(readFloatTuple(st));
+                output.addVertex(Utils.readFloatTuple(st));
                 vertexCounter++;
             }
 
             // vt: Texture coordinates for a vertex
             else if(identifier.equals("vt"))
             {
-                output.addTexCoord(readFloatTuple(st));
+                output.addTexCoord(Utils.readFloatTuple(st));
                 texCoordCounter++;
             }
 
             // vn: Vertex normal
             else if(identifier.equals("vn"))
             {
-                output.addNormal(readFloatTuple(st));
+                output.addNormal(Utils.readFloatTuple(st));
                 normalCounter++;
             }
 
@@ -284,57 +284,6 @@ public class ObjReader
             tokens.add(st.nextToken());
         }
         return tokens.toArray(new String[tokens.size()]);
-    }
-
-    /**
-     * Reads a float tuple from the given StringTokenizer
-     *
-     * @param st The StringTokenizer
-     * @return The FloatTuple
-     * @throws IOException If the tuple can not be read
-     */
-    private static FloatTuple readFloatTuple(StringTokenizer st)
-        throws IOException
-    {
-        float x = parse(st.nextToken());
-        if (st.hasMoreTokens())
-        {
-            float y = parse(st.nextToken());
-
-            if (st.hasMoreTokens())
-            {
-                float z = parse(st.nextToken());
-
-                if (st.hasMoreTokens())
-                {
-                    float w = parse(st.nextToken());
-                    return FloatTuples.create(x,y,z,w);
-                }
-                return FloatTuples.create(x,y,z);
-            }
-            return FloatTuples.create(x,y);
-        }
-        return FloatTuples.create(x);
-    }
-
-    /**
-     * Parse a float from the given string, wrapping number format
-     * exceptions into an IOException
-     *
-     * @param s The string
-     * @return The float
-     * @throws IOException If the string does not contain a valid float value
-     */
-    private static float parse(String s) throws IOException
-    {
-        try
-        {
-            return Float.parseFloat(s);
-        }
-        catch (NumberFormatException e)
-        {
-            throw new IOException(e);
-        }
     }
 
     /**
