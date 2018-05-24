@@ -25,7 +25,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package de.javagl.obj;
+package objHelper;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,7 +54,22 @@ public class ObjReader
      */
     public static Obj read(InputStream inputStream) throws IOException
     {
-        return read(inputStream, Objs.create());
+        return read(inputStream, Objs.create(), false);
+    }
+    
+    /**
+     * Read the OBJ data from the given stream and return it as an {@link Obj}.
+     * The caller is responsible for closing the given stream.
+     *
+     * @param inputStream The stream to read from
+     * @param flipVTexCoord When True the reader will flip V = (1 - V) all the V
+     * coords of the UV texture coords. this is required for OpenGL.
+     * @return The {@link Obj}
+     * @throws IOException If an IO error occurs
+     */
+    public static Obj read(InputStream inputStream, boolean flipVTexCoord) throws IOException
+    {
+        return read(inputStream, Objs.create(), flipVTexCoord);
     }
 
     /**
@@ -65,16 +80,17 @@ public class ObjReader
      * @param <T> The output type
      * @param inputStream The stream to read from
      * @param output The {@link WritableObj} to store the read data
+     * @param flipTexVCoord When true the reader will flip the V coord for the UV tex coords. Required by OpenGL.
      * @return The output
      * @throws IOException If an IO error occurs
      */
     public static <T extends WritableObj> T read(
-        InputStream inputStream, T output)
+        InputStream inputStream, T output, boolean flipVTexCoord)
         throws IOException
     {
         BufferedReader reader = new BufferedReader(
             new InputStreamReader(inputStream, StandardCharsets.US_ASCII));
-        return readImpl(reader, output);
+        return readImpl(reader, output, flipVTexCoord);
     }
 
     /**
@@ -107,9 +123,9 @@ public class ObjReader
     {
         if (reader instanceof BufferedReader)
         {
-            return readImpl((BufferedReader)reader, output);
+            return readImpl((BufferedReader)reader, output, false);
         }
-        return readImpl(new BufferedReader(reader), output);
+        return readImpl(new BufferedReader(reader), output, false);
 
     }
 
@@ -125,7 +141,7 @@ public class ObjReader
      * @throws IOException If an IO error occurs
      */
     private static <T extends WritableObj> T readImpl(
-        BufferedReader reader, T output)
+        BufferedReader reader, T output, boolean flipVTexCoord)
         throws IOException
     {
         ObjFaceParser objFaceParser = new ObjFaceParser();
@@ -181,7 +197,13 @@ public class ObjReader
             // vt: Texture coordinates for a vertex
             else if(identifier.equals("vt"))
             {
-                output.addTexCoord(readFloatTuple(st));
+            	FloatTuple texCoords = readFloatTuple(st);
+            	if(flipVTexCoord) {
+            		// Flip the V coord of the UV texture coord.
+                	texCoords = FloatTuples.create(texCoords.getX(), 1-texCoords.getY());
+            	}
+            	
+                output.addTexCoord(texCoords);
                 texCoordCounter++;
             }
 
