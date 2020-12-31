@@ -24,6 +24,8 @@ public class TestObjReader
         assertEquals(0, obj.getNumNormals());
         assertEquals(1, obj.getNumGroups());
         assertEquals(0, obj.getNumMaterialGroups());
+        assertEquals(new Rect3D(0f, 4f, 0f, 4f, 0f, 0f),
+                obj.getRect3D());
     }
     
     @Test
@@ -39,6 +41,8 @@ public class TestObjReader
         assertEquals(0, obj.getNumNormals());
         assertEquals(1, obj.getNumGroups());
         assertEquals(0, obj.getNumMaterialGroups());
+        assertEquals(new Rect3D(0f, 4f, 0f, 6f, 0f, 0f),
+                obj.getRect3D());
     }
 
     @Test

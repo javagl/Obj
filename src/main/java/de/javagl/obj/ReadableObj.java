@@ -27,6 +27,8 @@
 
 package de.javagl.obj;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 import java.util.Set;
 
@@ -210,4 +212,12 @@ public interface ReadableObj
      */
     List<String> getMtlFileNames();
 
+    /**
+     * Get the bounding 3d rectangle for this object. If this object contains no vertices the bounding rectangle will be
+     * null.
+     *
+     * @return The bounding rectangle for this object (or null).
+     */
+    @Nullable
+    Rect3D getRect3D();
 }

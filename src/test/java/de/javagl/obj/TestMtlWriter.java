@@ -16,9 +16,7 @@ import org.junit.Test;
 public class TestMtlWriter
 {
     @Test
-    public void writeMtl() 
-        throws IOException
-    {
+    public void writeMtl() throws IOException {
         String inputString = readResourceAsString(
             "/twoMaterialsA.mtl");
         List<Mtl> mtls = MtlReader.read(
@@ -32,8 +30,7 @@ public class TestMtlWriter
         assertEquals(inputString, outputString);
     }
     
-    private static String readResourceAsString(String name)
-    {
+    private static String readResourceAsString(String name) {
         InputStream inputStream = 
             TestObjWriter.class.getResourceAsStream(name);
         String string = readAsString(inputStream);
@@ -41,10 +38,8 @@ public class TestMtlWriter
         return string;
     }
     
-    private static String readAsString(InputStream inputStream) 
-    {
-        try (Scanner scanner = new Scanner(inputStream))
-        {
+    private static String readAsString(InputStream inputStream)  {
+        try (Scanner scanner = new Scanner(inputStream)) {
             scanner.useDelimiter("\\A");
             String string = scanner.next();
             return string;
