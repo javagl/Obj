@@ -493,5 +493,17 @@ public interface Mtl
      */
     List<TextureOptions> getReflOptions();
 
+    /**
+     * Set the roughness of this material
+     *
+     */
+    void setPr(Float pr);
 
+    /**
+     * Returns the roughness of the material,
+     * or <code>null</code> if it has no options.
+     *
+     * @return The roughness
+     */
+    Float getPr();
 }

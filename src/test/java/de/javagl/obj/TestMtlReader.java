@@ -163,4 +163,14 @@ public class TestMtlReader
         assertEquals(0.2f, options.getO().getY(), FLOAT_ERROR);
         assertEquals(0.0f, options.getO().getZ(), FLOAT_ERROR);
     }
+
+    @Test
+    public void readMtlWithPbrProperties() throws IOException {
+        List<Mtl> mtls = MtlReader.read(getClass().getResourceAsStream(
+                "/mtlWithPbrProperties.mtl"));
+
+        assertEquals(1, mtls.size());
+        Mtl mtl = mtls.get(0);
+        assertEquals(mtl.getPr(), 0.500000F, FLOAT_ERROR);
+    }
 }

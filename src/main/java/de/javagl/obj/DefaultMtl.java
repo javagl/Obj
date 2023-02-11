@@ -135,6 +135,9 @@ final class DefaultMtl implements Mtl
      */
     private final List<TextureOptions> reflOptions;
 
+    private Float pr;
+
+
     /**
      * Creates a new material with the given name
      *
@@ -535,6 +538,15 @@ final class DefaultMtl implements Mtl
         return reflOptions;
     }
 
+    @Override
+    public void setPr(Float pr) {
+        this.pr = pr;
+    }
+
+    @Override
+    public Float getPr() {
+        return this.pr;
+    }
 
     @Override
     public String toString()

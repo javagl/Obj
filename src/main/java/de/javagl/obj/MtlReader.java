@@ -37,6 +37,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import static de.javagl.obj.PbrPropertyReader.readPbrProperty;
+
+
 /**
  * A class that may read MTL data, and return the materials as a
  * list of {@link Mtl} objects.
@@ -225,6 +228,7 @@ public class MtlReader
         // Texture map definitions
         else
         {
+            readPbrProperty(mtl, command, tokens);
             readTextureMap(mtl, command, tokens);
         }
     }
