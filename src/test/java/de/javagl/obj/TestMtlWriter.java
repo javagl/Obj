@@ -49,6 +49,23 @@ public class TestMtlWriter
         assertEquals(inputString, outputString);
     }
 
+    @Test
+    public void writePbrMtl()
+        throws IOException
+    {
+        String inputString = readResourceAsString(
+            "/pbrMaterial.mtl");
+        List<Mtl> mtls = MtlReader.read(
+            new ByteArrayInputStream(inputString.getBytes()));
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        MtlWriter.write(mtls, baos);
+        String outputString = new String(baos.toByteArray());
+
+        System.out.println(outputString);
+        assertEquals(inputString, outputString);
+    }
+
 
     private static String readResourceAsString(String name)
     {

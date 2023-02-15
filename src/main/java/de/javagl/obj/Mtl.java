@@ -493,5 +493,312 @@ public interface Mtl
      */
     List<TextureOptions> getReflOptions();
 
+    //==========================================================================
+    // PBR parameters:
 
+    //--------------------------------------------------------------------------
+    // Roughness
+
+    /**
+     * Returns the roughness component of the material,
+     * or <code>null</code> if it was not specified
+     *
+     * @return The roughness component of the material
+     */
+    Float getPr();
+
+    /**
+     * Set the roughness part of this material
+     *
+     * @param pr The roughness
+     */
+    void setPr(Float pr);
+
+    /**
+     * Returns the name of the roughness map of the material,
+     * or <code>null</code> if it has no such map.
+     *
+     * @return The name of the roughness map of the material
+     */
+    String getMapPr();
+
+    /**
+     * Set the roughness map name of this material
+     *
+     * @param mapPr The roughness map name of this material
+     */
+    void setMapPr(String mapPr);
+
+    /**
+     * Returns the roughness map options of the material,
+     * or <code>null</code> if it has no options.
+     *
+     * @return The roughness map {@link TextureOptions}
+     */
+    TextureOptions getMapPrOptions();
+
+    /**
+     * Set the roughness map {@link TextureOptions}
+     *
+     * @param options The roughness map {@link TextureOptions}
+     */
+    void setMapPrOptions(TextureOptions options);
+    
+
+    //--------------------------------------------------------------------------
+    // Metallic
+
+    /**
+     * Returns the metallic component of the material,
+     * or <code>null</code> if it was not specified
+     *
+     * @return The metallic component of the material
+     */
+    Float getPm();
+
+    /**
+     * Set the metallic part of this material
+     *
+     * @param pm The metallic part
+     */
+    void setPm(Float pm);
+
+    /**
+     * Returns the name of the metallic map of the material,
+     * or <code>null</code> if it has no such map.
+     *
+     * @return The name of the metallic map of the material
+     */
+    String getMapPm();
+
+    /**
+     * Set the metallic map name of this material
+     *
+     * @param mapPm The metallic map name of this material
+     */
+    void setMapPm(String mapPm);
+
+    /**
+     * Returns the metallic map options of the material,
+     * or <code>null</code> if it has no options.
+     *
+     * @return The metallic map {@link TextureOptions}
+     */
+    TextureOptions getMapPmOptions();
+
+    /**
+     * Set the metallic map {@link TextureOptions}
+     *
+     * @param options The metallic map {@link TextureOptions}
+     */
+    void setMapPmOptions(TextureOptions options);
+
+    
+    //--------------------------------------------------------------------------
+    // Sheen
+
+    /**
+     * Returns the sheen component of the material,
+     * or <code>null</code> if it was not specified
+     *
+     * @return The sheen component of the material
+     */
+    Float getPs();
+
+    /**
+     * Set the sheen part of this material
+     *
+     * @param ps The sheen part
+     */
+    void setPs(Float ps);
+
+    /**
+     * Returns the name of the sheen map of the material,
+     * or <code>null</code> if it has no such map.
+     *
+     * @return The name of the sheen map of the material
+     */
+    String getMapPs();
+
+    /**
+     * Set the sheen map name of this material
+     *
+     * @param mapPs The sheen map name of this material
+     */
+    void setMapPs(String mapPs);
+
+    /**
+     * Returns the sheen map options of the material,
+     * or <code>null</code> if it has no options.
+     *
+     * @return The sheen map {@link TextureOptions}
+     */
+    TextureOptions getMapPsOptions();
+
+    /**
+     * Set the sheen map {@link TextureOptions}
+     *
+     * @param options The sheen map {@link TextureOptions}
+     */
+    void setMapPsOptions(TextureOptions options);
+    
+    
+    //--------------------------------------------------------------------------
+    // Pc (clearcoat thickness)
+    
+    /**
+     * Returns the clearcoat thickness of the material, 
+     * or <code>null</code> if it was not specified
+     * 
+     * @return The clearcoat thickness
+     */
+    Float getPc();
+    
+    /**
+     * Set the clearcoat thickness of the material
+     * 
+     * @param pc The clearcoat thickness
+     */
+    void setPc(Float pc);
+
+    //--------------------------------------------------------------------------
+    // Pcr (clearcoat roughness)
+    
+    /**
+     * Returns the clearcoat roughness of the material, 
+     * or <code>null</code> if it was not specified
+     * 
+     * @return The clearcoat roughness
+     */
+    Float getPcr();
+    
+    /**
+     * Set the clearcoat roughness of the material
+     * 
+     * @param pcr The clearcoat roughness
+     */
+    void setPcr(Float pcr);
+    
+    
+    //--------------------------------------------------------------------------
+    // Emissive
+
+    /**
+     * Returns the emissive component of the material,
+     * or <code>null</code> if it was not specified
+     *
+     * @return The emissive component of the material
+     */
+    FloatTuple getKe();
+
+    /**
+     * Set the emissive part of this material
+     *
+     * @param r The red component
+     * @param g The green component
+     * @param b The blue component
+     */
+    void setKe(Float r, Float g, Float b);
+
+    /**
+     * Returns the name of the emissive map of the material,
+     * or <code>null</code> if it has no such map.
+     *
+     * @return The name of the emissive map of the material
+     */
+    String getMapKe();
+
+    /**
+     * Set the emissive map name of this material
+     *
+     * @param mapKe The emissive map name of this material
+     */
+    void setMapKe(String mapKe);
+
+    /**
+     * Returns the emissive map options of the material,
+     * or <code>null</code> if it has no options.
+     *
+     * @return The emissive map {@link TextureOptions}
+     */
+    TextureOptions getMapKeOptions();
+
+    /**
+     * Set the emissive map {@link TextureOptions}
+     *
+     * @param options The emissive map {@link TextureOptions}
+     */
+    void setMapKeOptions(TextureOptions options);
+ 
+    
+    //--------------------------------------------------------------------------
+    // aniso (anisotropy)
+    
+    /**
+     * Returns the anisotropy of the material, 
+     * or <code>null</code> if it was not specified
+     * 
+     * @return The anisotropy
+     */
+    Float getAniso();
+    
+    /**
+     * Set the anisotropy of the material
+     * 
+     * @param aniso The anisotropy
+     */
+    void setAniso(Float aniso);
+    
+    //--------------------------------------------------------------------------
+    // anisor (anisotropy rotation)
+    
+    /**
+     * Returns the anisotropy rotation of the material, 
+     * or <code>null</code> if it was not specified
+     * 
+     * @return The anisotropy rotation
+     */
+    Float getAnisor();
+    
+    /**
+     * Set the anisotropy rotation of the material
+     * 
+     * @param anisor The anisotropy rotation
+     */
+    void setAnisor(Float anisor);
+    
+
+    //--------------------------------------------------------------------------
+    // Normal
+
+    /**
+     * Returns the name of the normal map of the material,
+     * or <code>null</code> if it has no such map.
+     *
+     * @return The name of the normal map of the material
+     */
+    String getNorm();
+
+    /**
+     * Set the normal map name of this material
+     *
+     * @param norm The normal map name of this material
+     */
+    void setNorm(String norm);
+
+    /**
+     * Returns the normal map options of the material,
+     * or <code>null</code> if it has no options.
+     *
+     * @return The normal map {@link TextureOptions}
+     */
+    TextureOptions getNormOptions();
+
+    /**
+     * Set the normal map {@link TextureOptions}
+     *
+     * @param options The normal map {@link TextureOptions}
+     */
+    void setNormOptions(TextureOptions options);
+    
 }

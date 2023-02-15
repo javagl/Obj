@@ -134,6 +134,73 @@ final class DefaultMtl implements Mtl
      * The reflection map texture options
      */
     private final List<TextureOptions> reflOptions;
+    
+    // PBR Parameters:
+    
+    /**
+     * The roughness of this material
+     */
+    private Float pr;
+
+    /**
+     * The roughness map texture options
+     */
+    private TextureOptions mapPrOptions;
+
+    /**
+     * The metallic part of this material
+     */
+    private Float pm;
+
+    /**
+     * The metallic map texture options
+     */
+    private TextureOptions mapPmOptions;
+
+    /**
+     * The sheen part of this material
+     */
+    private Float ps;
+
+    /**
+     * The sheen map texture options
+     */
+    private TextureOptions mapPsOptions;
+
+    /**
+     * The clearcoat thickness of this material
+     */
+    private Float pc;
+
+    /**
+     * The clearcoat roughness of this material
+     */
+    private Float pcr;
+    
+    /**
+     * The emissive part of this material
+     */
+    private FloatTuple ke;
+
+    /**
+     * The emissive map texture options
+     */
+    private TextureOptions mapKeOptions;
+
+    /**
+     * The anisotropy of this material
+     */
+    private Float aniso;
+    
+    /**
+     * The anisotropy rotation of this material
+     */
+    private Float anisor;
+    
+    /**
+     * The normal map texture options
+     */
+    private TextureOptions normOptions;
 
     /**
      * Creates a new material with the given name
@@ -534,7 +601,264 @@ final class DefaultMtl implements Mtl
     {
         return reflOptions;
     }
+    
+    // PRB parameters
+    
+    @Override
+    public Float getPr()
+    {
+        return pr;
+    }
 
+    @Override
+    public void setPr(Float pr)
+    {
+        this.pr = pr;
+    }
+
+    @Override
+    public String getMapPr()
+    {
+        if (mapPrOptions == null)
+        {
+            return null;
+        }
+        return mapPrOptions.getFileName();
+    }
+
+    @Override
+    public void setMapPr(String mapPr)
+    {
+        if (mapPrOptions == null)
+        {
+            mapPrOptions = new DefaultTextureOptions();
+        }
+        mapPrOptions.setFileName(mapPr);
+    }
+
+    @Override
+    public TextureOptions getMapPrOptions()
+    {
+        return mapPrOptions;
+    }
+
+    @Override
+    public void setMapPrOptions(TextureOptions options)
+    {
+        this.mapPrOptions = options;
+    }
+
+    @Override
+    public Float getPm()
+    {
+        return pm;
+    }
+
+    @Override
+    public void setPm(Float pm)
+    {
+        this.pm = pm;
+    }
+
+    @Override
+    public String getMapPm()
+    {
+        if (mapPmOptions == null)
+        {
+            return null;
+        }
+        return mapPmOptions.getFileName();
+    }
+
+    @Override
+    public void setMapPm(String mapPm)
+    {
+        if (mapPmOptions == null)
+        {
+            mapPmOptions = new DefaultTextureOptions();
+        }
+        mapPmOptions.setFileName(mapPm);
+    }
+
+    @Override
+    public TextureOptions getMapPmOptions()
+    {
+        return mapPmOptions;
+    }
+
+    @Override
+    public void setMapPmOptions(TextureOptions options)
+    {
+        this.mapPmOptions = options;
+    }
+
+    @Override
+    public Float getPs()
+    {
+        return ps;
+    }
+
+    @Override
+    public void setPs(Float ps)
+    {
+        this.ps = ps;
+    }
+
+    @Override
+    public String getMapPs()
+    {
+        if (mapPsOptions == null)
+        {
+            return null;
+        }
+        return mapPsOptions.getFileName();
+    }
+
+    @Override
+    public void setMapPs(String mapPs)
+    {
+        if (mapPsOptions == null)
+        {
+            mapPsOptions = new DefaultTextureOptions();
+        }
+        mapPsOptions.setFileName(mapPs);
+    }
+
+    @Override
+    public TextureOptions getMapPsOptions()
+    {
+        return mapPsOptions;
+    }
+
+    @Override
+    public void setMapPsOptions(TextureOptions options)
+    {
+        this.mapPsOptions = options;
+    }
+
+    @Override
+    public Float getPc()
+    {
+        return pc;
+    }
+
+    @Override
+    public void setPc(Float pc)
+    {
+        this.pc = pc;
+    }
+
+    @Override
+    public Float getPcr()
+    {
+        return pcr;
+    }
+
+    @Override
+    public void setPcr(Float pcr)
+    {
+        this.pcr = pcr;
+    }
+
+    @Override
+    public FloatTuple getKe()
+    {
+        return ke;
+    }
+
+    @Override
+    public void setKe(Float r, Float g, Float b)
+    {
+        this.ke = Utils.createRgbTuple(r, g, b);
+    }
+
+    @Override
+    public String getMapKe()
+    {
+        if (mapKeOptions == null)
+        {
+            return null;
+        }
+        return mapKeOptions.getFileName();
+    }
+
+    @Override
+    public void setMapKe(String mapKe)
+    {
+        if (mapKeOptions == null)
+        {
+            mapKeOptions = new DefaultTextureOptions();
+        }
+        mapKeOptions.setFileName(mapKe);
+    }
+
+    @Override
+    public TextureOptions getMapKeOptions()
+    {
+        return mapKeOptions;
+    }
+
+    @Override
+    public void setMapKeOptions(TextureOptions options)
+    {
+        this.mapKeOptions = options;
+    }
+
+    @Override
+    public Float getAniso()
+    {
+        return aniso;
+    }
+
+    @Override
+    public void setAniso(Float aniso)
+    {
+        this.aniso = aniso;
+    }
+
+    @Override
+    public Float getAnisor()
+    {
+        return anisor;
+    }
+
+    @Override
+    public void setAnisor(Float anisor)
+    {
+        this.anisor = anisor;
+    }
+
+    @Override
+    public String getNorm()
+    {
+        if (normOptions == null)
+        {
+            return null;
+        }
+        return normOptions.getFileName();
+    }
+
+    @Override
+    public void setNorm(String norm)
+    {
+        if (normOptions == null)
+        {
+            normOptions = new DefaultTextureOptions();
+        }
+        normOptions.setFileName(norm);
+    }
+
+    @Override
+    public TextureOptions getNormOptions()
+    {
+        return normOptions;
+    }
+
+    @Override
+    public void setNormOptions(TextureOptions options)
+    {
+        this.normOptions = options;
+    }
 
     @Override
     public String toString()
@@ -546,6 +870,5 @@ final class DefaultMtl implements Mtl
         sb.append("]");
         return sb.toString();
     }
-
 
 }

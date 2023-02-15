@@ -188,6 +188,14 @@ public class MtlReader
             Float[] values = Utils.parseFloats(tokens, 3);
             mtl.setTf(values[0], values[1], values[2]);
         }
+        
+        // Color values for PBR
+        else if (command.equalsIgnoreCase("Ke"))
+        {
+            Float[] values = Utils.parseFloats(tokens, 3);
+            mtl.setKe(values[0], values[1], values[2]);
+        }
+        
 
         // Single float values
         else if (command.equalsIgnoreCase("Tr"))
@@ -221,6 +229,44 @@ public class MtlReader
             float value = Utils.parseFloat(tokens.poll());
             mtl.setNs(value);
         }
+
+        // Single float values for PBR
+        else if (command.equalsIgnoreCase("Pr"))
+        {
+            float value = Utils.parseFloat(tokens.poll());
+            mtl.setPr(value);
+        }
+        else if (command.equalsIgnoreCase("Pm"))
+        {
+            float value = Utils.parseFloat(tokens.poll());
+            mtl.setPm(value);
+        }
+        else if (command.equalsIgnoreCase("Ps"))
+        {
+            float value = Utils.parseFloat(tokens.poll());
+            mtl.setPs(value);
+        }
+        else if (command.equalsIgnoreCase("Pc"))
+        {
+            float value = Utils.parseFloat(tokens.poll());
+            mtl.setPc(value);
+        }
+        else if (command.equalsIgnoreCase("Pcr"))
+        {
+            float value = Utils.parseFloat(tokens.poll());
+            mtl.setPcr(value);
+        }
+        else if (command.equalsIgnoreCase("aniso"))
+        {
+            float value = Utils.parseFloat(tokens.poll());
+            mtl.setAniso(value);
+        }
+        else if (command.equalsIgnoreCase("anisor"))
+        {
+            float value = Utils.parseFloat(tokens.poll());
+            mtl.setAnisor(value);
+        }
+        
 
         // Texture map definitions
         else
@@ -285,6 +331,29 @@ public class MtlReader
             TextureOptions refl = readTextureOptions(tokens);
             mtl.getReflOptions().add(refl);
         }
+        
+        // Texture map definitions for PBR
+        else if (command.equalsIgnoreCase("map_Pr"))
+        {
+            mtl.setMapPrOptions(readTextureOptions(tokens));
+        }
+        else if (command.equalsIgnoreCase("map_Pm"))
+        {
+            mtl.setMapPmOptions(readTextureOptions(tokens));
+        }
+        else if (command.equalsIgnoreCase("map_Ps"))
+        {
+            mtl.setMapPsOptions(readTextureOptions(tokens));
+        }
+        else if (command.equalsIgnoreCase("map_Ke"))
+        {
+            mtl.setMapKeOptions(readTextureOptions(tokens));
+        }
+        else if (command.equalsIgnoreCase("norm"))
+        {
+            mtl.setNormOptions(readTextureOptions(tokens));
+        }
+        
     }
 
 

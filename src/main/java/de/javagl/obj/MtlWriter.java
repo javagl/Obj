@@ -132,6 +132,22 @@ public class MtlWriter
         {
             appendTextureOptions(sb, "refl", refl);
         }
+        
+        // PBR parameters
+        append(sb, "Pr", mtl.getPr(), "\n");
+        appendTextureOptions(sb, "map_Pr", mtl.getMapPrOptions());
+        append(sb, "Pm", mtl.getPm(), "\n");
+        appendTextureOptions(sb, "map_Pm", mtl.getMapPmOptions());
+        append(sb, "Ps", mtl.getPs(), "\n");
+        appendTextureOptions(sb, "map_Ps", mtl.getMapPsOptions());
+        append(sb, "Pc", mtl.getPc(), "\n");
+        append(sb, "Pcr", mtl.getPcr(), "\n");
+        appendTuple(sb, "Ke", mtl.getKe(), "\n");
+        appendTextureOptions(sb, "map_Ke", mtl.getMapKeOptions());
+        append(sb, "aniso", mtl.getAniso(), "\n");
+        append(sb, "anisor", mtl.getAnisor(), "\n");
+        appendTextureOptions(sb, "norm", mtl.getNormOptions());
+        
         return sb.toString();
     }
 
