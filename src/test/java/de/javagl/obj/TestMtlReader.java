@@ -163,4 +163,24 @@ public class TestMtlReader
         assertEquals(0.2f, options.getO().getY(), FLOAT_ERROR);
         assertEquals(0.0f, options.getO().getZ(), FLOAT_ERROR);
     }
+
+
+    @Test
+    public void readMtlWithPbrProperties()
+            throws IOException {
+        List<Mtl> mtls = MtlReader.read(getClass().getResourceAsStream(
+                "/mtlWithPbrProperties.mtl"));
+
+        assertEquals(1, mtls.size());
+
+        Mtl mtl = mtls.get(0);
+        assertEquals("Material.001", mtl.getName());
+        assertEquals(0.5, mtl.getPr(), FLOAT_ERROR);
+        assertEquals(0.7, mtl.getPm(), FLOAT_ERROR);
+        assertEquals(0.1, mtl.getPs(), FLOAT_ERROR);
+        assertEquals(0.4, mtl.getPc(), FLOAT_ERROR);
+        assertEquals(0.03, mtl.getPcr(), FLOAT_ERROR);
+        assertEquals(0.001, mtl.getAniso(), FLOAT_ERROR);
+        assertEquals(0.01, mtl.getAnisor(), FLOAT_ERROR);
+    }
 }
