@@ -1,0 +1,14 @@
+newmtl material1
+Pr 0.12
+map_Pr roughness.png
+Pm 0.23
+map_Pm metallic.png
+Ps 0.34
+map_Ps sheen.png
+Pc 0.11
+Pcr 0.222
+Ke 0.2 0.3 0.4
+map_Ke emissive.png
+aniso 0.2
+anisor 0.3
+norm normals.png
