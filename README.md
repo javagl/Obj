@@ -146,13 +146,42 @@ part with WebGL or OpenGL ES 2.0, the following code can be used:
 
 # Change log
 
-**0.3.1-SNAPSHOT**
+**0.4.1-SNAPSHOT**
+ - ...
+ 
+**0.4.0** (2023-03-04)
 
 - Updated MTL handling to support additional options. This includes the
   options that have been part of the original MTL specification, as well
   as PBR (Physically Based Rendering) options.
-  - **API change**: The `Mtl#get...` methods may now return `null` when
-    no information was parsed from the input file
+
+  - A new interface `TextureOptions` has been introduced. For texture
+    maps, the `Mtl` interface now has methods `getMap...Options()`
+    and `setMap...Options(...)`. This `TextureOptions` object
+    contains the parameters that are common for all texture maps, like
+    blending states, offsets, or scales, as described in the MTL specification.
+
+  - **API change**: The `Mtl#get...` methods will now return `null` when
+    no information was parsed from the input file.
+    Code that originally called one of these methods, like
+
+    ```
+    float d = mtl.getD();
+    ```
+
+    should now check whether these values are not `null`, as in
+
+    ```
+    float d = 1.0f; // The default value for the opacity
+    if (mtl.getD() != null)
+    {
+        d = mtl.getD();
+    }
+    ```
+
+    This will not affect clients that only read or write the `Mtl` with the
+    `MtlReader` or `MtlWriter`, because these classes will handle the
+    `null`-cases internally.
 
 
 **0.3.0** (2018-01-12)
