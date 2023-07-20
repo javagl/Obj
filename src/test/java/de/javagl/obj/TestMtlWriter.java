@@ -62,7 +62,7 @@ public class TestMtlWriter
         MtlWriter.write(mtls, baos);
         String outputString = new String(baos.toByteArray());
 
-        System.out.println(outputString);
+        //System.out.println(outputString);
         assertEquals(inputString, outputString);
     }
 

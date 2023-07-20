@@ -1,0 +1,11 @@
+# The texture map definitions contain directory- and file names
+# that contain spaces
+newmtl material0    
+Ka 1.0 0.0 0.0
+Kd 1.0 1.0 0.0
+Ks 1.0 1.0 1.0
+Ns 500.0
+map_Kd -cc on file name with spaces.png    
+map_Ka -s 2 	2 	2 	directory name with spaces/file name with spaces.png    
+map_Ks -s 2	2 / another file name    .png    
+d 123.0
