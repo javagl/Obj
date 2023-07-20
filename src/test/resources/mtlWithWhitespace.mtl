@@ -1,9 +1,10 @@
 # Some lines have leading and trailing whitespace,
-# in form of space characters or tabs
+# in form of space characters or tabs, and tabs
+# between elements of the texture map options
     newmtl material0    
     Ka 1.0 0.0 0.0    
 Kd 1.0 1.0 0.0
     Ks 1.0 1.0 1.0	    
     Ns 500.0    
-	map_Kd texture.png
+	map_Kd 	-s 	2 	2 	2 texture.png
 d 1.0

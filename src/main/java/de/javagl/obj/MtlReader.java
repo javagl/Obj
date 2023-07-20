@@ -271,10 +271,12 @@ public class MtlReader
         // Texture map definitions
         else
         {
-            readTextureMap(mtl, command, tokens);
+            String textureOptionsString = Utils.consumeNextToken(line);
+            readTextureMap(mtl, command, textureOptionsString);
         }
     }
 
+    
     /**
      * Process the line of an MTL file that is supposed to contain a
      * texture map definition, and write the resulting texture
@@ -286,166 +288,267 @@ public class MtlReader
      *
      * @param mtl The {@link Mtl}
      * @param command The command at the beginning of the line
-     * @param tokens The tokens that have been created from the line
+     * @param textureOptionsString The texture options, i.e. the part of 
+     * the line after the command
      * @throws IOException If an IO error occurs
      */
     private static void readTextureMap(
-        Mtl mtl, String command, Queue<String> tokens)
+        Mtl mtl, String command, String textureOptionsString)
             throws IOException
     {
         if (command.equalsIgnoreCase("map_Ka"))
         {
-            mtl.setMapKaOptions(readTextureOptions(tokens));
+            mtl.setMapKaOptions(readTextureOptions(textureOptionsString));
         }
         else if (command.equalsIgnoreCase("map_Kd"))
         {
-            mtl.setMapKdOptions(readTextureOptions(tokens));
+            mtl.setMapKdOptions(readTextureOptions(textureOptionsString));
         }
         else if (command.equalsIgnoreCase("map_Ks"))
         {
-            mtl.setMapKsOptions(readTextureOptions(tokens));
+            mtl.setMapKsOptions(readTextureOptions(textureOptionsString));
         }
         else if (command.equalsIgnoreCase("map_d"))
         {
-            mtl.setMapDOptions(readTextureOptions(tokens));
+            mtl.setMapDOptions(readTextureOptions(textureOptionsString));
         }
         else if (command.equalsIgnoreCase("map_Ns"))
         {
-            mtl.setMapNsOptions(readTextureOptions(tokens));
+            mtl.setMapNsOptions(readTextureOptions(textureOptionsString));
         }
         else if (command.equalsIgnoreCase("bump")
             || command.equalsIgnoreCase("map_bump"))
         {
-            mtl.setBumpOptions(readTextureOptions(tokens));
+            mtl.setBumpOptions(readTextureOptions(textureOptionsString));
         }
         else if (command.equalsIgnoreCase("disp"))
         {
-            mtl.setDispOptions(readTextureOptions(tokens));
+            mtl.setDispOptions(readTextureOptions(textureOptionsString));
         }
         else if (command.equalsIgnoreCase("decal"))
         {
-            mtl.setDecalOptions(readTextureOptions(tokens));
+            mtl.setDecalOptions(readTextureOptions(textureOptionsString));
         }
         else if (command.equalsIgnoreCase("refl"))
         {
-            TextureOptions refl = readTextureOptions(tokens);
+            TextureOptions refl = readTextureOptions(textureOptionsString);
             mtl.getReflOptions().add(refl);
         }
         
         // Texture map definitions for PBR
         else if (command.equalsIgnoreCase("map_Pr"))
         {
-            mtl.setMapPrOptions(readTextureOptions(tokens));
+            mtl.setMapPrOptions(readTextureOptions(textureOptionsString));
         }
         else if (command.equalsIgnoreCase("map_Pm"))
         {
-            mtl.setMapPmOptions(readTextureOptions(tokens));
+            mtl.setMapPmOptions(readTextureOptions(textureOptionsString));
         }
         else if (command.equalsIgnoreCase("map_Ps"))
         {
-            mtl.setMapPsOptions(readTextureOptions(tokens));
+            mtl.setMapPsOptions(readTextureOptions(textureOptionsString));
         }
         else if (command.equalsIgnoreCase("map_Ke"))
         {
-            mtl.setMapKeOptions(readTextureOptions(tokens));
+            mtl.setMapKeOptions(readTextureOptions(textureOptionsString));
         }
         else if (command.equalsIgnoreCase("norm"))
         {
-            mtl.setNormOptions(readTextureOptions(tokens));
+            mtl.setNormOptions(readTextureOptions(textureOptionsString));
         }
         
     }
 
 
     /**
-     * Process the tokens in the given queue and construct a
-     * {@link TextureOptions} object from them
+     * Process the given texture options string and construct a
+     * {@link TextureOptions} object from it
      *
-     * @param tokens The input token
+     * @param textureOptionsString The texture options, i.e. the part of 
+     * the line after the command
      * @return The {@link TextureOptions}
      * @throws IOException If an IO error occurs
      */
-    static TextureOptions readTextureOptions(Queue<String> tokens)
+    static TextureOptions readTextureOptions(String textureOptionsString)
         throws IOException {
 
+        String s = textureOptionsString;
         DefaultTextureOptions textureOptions = new DefaultTextureOptions();
-        while (!tokens.isEmpty())
+        while (true)
         {
-            String optionName = tokens.poll();
+            // If the next token is one of the known options, then consume
+            // the token. The next tokens will then contain the value(s)
+            // of the options. These values are parsed, consume, and their
+            // values are assigned to the texture options
+            String optionName = Utils.extractNextToken(s);
             if (optionName.equalsIgnoreCase("-blendu"))
             {
-                boolean value = Utils.parseBoolean(tokens.poll());
+                s = Utils.consumeNextToken(s);
+                boolean value = Utils.parseNextBoolean(s);
+                s = Utils.consumeNextToken(s);
                 textureOptions.setBlendu(value);
             }
             else if (optionName.equalsIgnoreCase("-blendv"))
             {
-                boolean value = Utils.parseBoolean(tokens.poll());
+                s = Utils.consumeNextToken(s);
+                boolean value = Utils.parseNextBoolean(s);
+                s = Utils.consumeNextToken(s);
                 textureOptions.setBlendv(value);
             }
             else if (optionName.equalsIgnoreCase("-boost"))
             {
-                float value = Utils.parseFloat(tokens.poll());
+                s = Utils.consumeNextToken(s);
+                float value = Utils.parseNextFloat(s);
+                s = Utils.consumeNextToken(s);
                 textureOptions.setBoost(value);
             }
             else if (optionName.equalsIgnoreCase("-cc"))
             {
-                boolean value = Utils.parseBoolean(tokens.poll());
+                s = Utils.consumeNextToken(s);
+                boolean value = Utils.parseNextBoolean(s);
+                s = Utils.consumeNextToken(s);
                 textureOptions.setCc(value);
             }
             else if (optionName.equalsIgnoreCase("-mm"))
             {
-                float base = Utils.parseFloat(tokens.poll());
-                float gain = Utils.parseFloat(tokens.poll());
+                s = Utils.consumeNextToken(s);
+                float base = Utils.parseNextFloat(s);
+                s = Utils.consumeNextToken(s);
+                float gain = Utils.parseNextFloat(s);
+                s = Utils.consumeNextToken(s);
                 textureOptions.setMm(base, gain);
             }
             else if (optionName.equalsIgnoreCase("-o"))
             {
-                Float[] values = Utils.parseFloats(tokens, 3);
+                s = Utils.consumeNextToken(s);
+
+                Float[] values = new Float[3];
+
+                // The u value is required 
+                String su = Utils.extractNextToken(s);
+                s = Utils.consumeNextToken(s);
+                values[0] = Utils.parseFloat(su);
+
+                // The v/w values are optional. Only parse and consume
+                // the next tokens if they are float values.
+                String sv = Utils.extractNextToken(s);
+                if (Utils.isFloat(sv))
+                {
+                    values[1] = Utils.parseFloat(sv);
+                    s = Utils.consumeNextToken(s);
+                    String sw = Utils.extractNextToken(s);
+                    if (Utils.isFloat(sw))
+                    {
+                        values[2] = Utils.parseFloat(sw);
+                        s = Utils.consumeNextToken(s);
+                    }
+                }
                 textureOptions.setO(values[0], values[1], values[2]);
             }
             else if (optionName.equalsIgnoreCase("-s"))
             {
-                Float[] values = Utils.parseFloats(tokens, 3);
+                s = Utils.consumeNextToken(s);
+
+                Float[] values = new Float[3];
+
+                // The u value is required 
+                String su = Utils.extractNextToken(s);
+                s = Utils.consumeNextToken(s);
+                values[0] = Utils.parseFloat(su);
+
+                // The v/w values are optional. Only parse and consume
+                // the next tokens if they are float values.
+                String sv = Utils.extractNextToken(s);
+                if (Utils.isFloat(sv))
+                {
+                    values[1] = Utils.parseFloat(sv);
+                    s = Utils.consumeNextToken(s);
+                    String sw = Utils.extractNextToken(s);
+                    if (Utils.isFloat(sw))
+                    {
+                        values[2] = Utils.parseFloat(sw);
+                        s = Utils.consumeNextToken(s);
+                    }
+                }
                 textureOptions.setS(values[0], values[1], values[2]);
             }
             else if (optionName.equalsIgnoreCase("-t"))
             {
-                Float[] values = Utils.parseFloats(tokens, 3);
+                s = Utils.consumeNextToken(s);
+
+                Float[] values = new Float[3];
+
+                // The u value is required 
+                String su = Utils.extractNextToken(s);
+                s = Utils.consumeNextToken(s);
+                values[0] = Utils.parseFloat(su);
+
+                // The v/w values are optional. Only parse and consume
+                // the next tokens if they are float values.
+                String sv = Utils.extractNextToken(s);
+                if (Utils.isFloat(sv))
+                {
+                    values[1] = Utils.parseFloat(sv);
+                    s = Utils.consumeNextToken(s);
+                    String sw = Utils.extractNextToken(s);
+                    if (Utils.isFloat(sw))
+                    {
+                        values[2] = Utils.parseFloat(sw);
+                        s = Utils.consumeNextToken(s);
+                    }
+                }
                 textureOptions.setT(values[0], values[1], values[2]);
             }
             else if (optionName.equalsIgnoreCase("-texres"))
             {
-                float value = Utils.parseFloat(tokens.poll());
+                s = Utils.consumeNextToken(s);
+                float value = Utils.parseNextFloat(s);
+                s = Utils.consumeNextToken(s);
                 textureOptions.setTexres(value);
             }
             else if (optionName.equalsIgnoreCase("-clamp"))
             {
-                boolean value = Utils.parseBoolean(tokens.poll());
+                s = Utils.consumeNextToken(s);
+                boolean value = Utils.parseNextBoolean(s);
+                s = Utils.consumeNextToken(s);
                 textureOptions.setClamp(value);
             }
             else if (optionName.equalsIgnoreCase("-bm"))
             {
-                float value = Utils.parseFloat(tokens.poll());
+                s = Utils.consumeNextToken(s);
+                float value = Utils.parseNextFloat(s);
+                s = Utils.consumeNextToken(s);
                 textureOptions.setBm(value);
             }
             else if (optionName.equalsIgnoreCase("-imfchan"))
             {
-                String value = tokens.poll();
+                s = Utils.consumeNextToken(s);
+                String value = Utils.extractNextToken(s);
+                s = Utils.consumeNextToken(s);
                 textureOptions.setImfchan(value);
             }
             else if (optionName.equalsIgnoreCase("-type"))
             {
-                String value = tokens.poll();
+                s = Utils.consumeNextToken(s);
+                String value = Utils.extractNextToken(s);
+                s = Utils.consumeNextToken(s);
                 textureOptions.setType(value);
             }
             else
             {
-                textureOptions.setFileName(optionName);
+                // The current token is not one of the known options.
+                // Treat the remaining part of the options (including 
+                // the current token) as the "file name" 
+                textureOptions.setFileName(s);
+                break;
             }
         }
         return textureOptions;
     }
-
+    
+    
+    
+    
 
     /**
      * Private constructor to prevent instantiation

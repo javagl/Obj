@@ -27,6 +27,8 @@
 package de.javagl.obj;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
@@ -93,7 +95,7 @@ class Utils
      * @return Whether the string is a float value. If the given string is
      * <code>null</code>, then <code>false</code> is returned.
      */
-    private static boolean isFloat(String s)
+    static boolean isFloat(String s)
     {
         if (s == null)
         {
@@ -109,6 +111,84 @@ class Utils
             return false;
         }
     }
+    
+    /**
+     * Extract the next token from the given string, parse it as a float
+     * value, and return the result
+     * 
+     * @param s The input string
+     * @return The parsed token value
+     * @throws IOException If the string does not contain a valid float value
+     */
+    static float parseNextFloat(String s) throws IOException 
+    {
+        String token = extractNextToken(s);
+        return parseFloat(token);
+    }
+    
+    /**
+     * Extract the next token from the given string, parse it as a boolean
+     * value, and return the result
+     * 
+     * @param s The input string
+     * @return The parsed token value
+     * @throws IOException If the string does not contain a valid boolean value
+     */
+    static boolean parseNextBoolean(String s) throws IOException 
+    {
+        String token = extractNextToken(s);
+        return parseBoolean(token);
+    }
+
+    /**
+     * Extract the next token from the given string.
+     * 
+     * The next token starts at the first non-whitespace character, and
+     * ends at the first character that is either a whitespace or a
+     * line feed or carriage return.
+     * 
+     * @param s The input string
+     * @return The next token
+     */
+    static String extractNextToken(String s)
+    {
+        String t = s.trim();
+        for (int i = 0; i < t.length(); i++)
+        {
+            char c = t.charAt(i);
+            if (c == ' ' || c == '\n' || c == '\t' || c == '\r' || c == '\f')
+            {
+                return t.substring(0, i).trim();
+            }
+        }
+        return "";
+    }
+    
+    /**
+     * Consume the next token from the given string, and return the remaining
+     * string, excluding spaces.
+     * 
+     * The next token starts at the first non-whitespace character, and
+     * ends at the first character that is either a whitespace or a
+     * line feed or carriage return.
+     * 
+     * @param s The input string
+     * @return The string after the next token, trimmed
+     */
+    static String consumeNextToken(String s)
+    {
+        String t = s.trim();
+        for (int i = 0; i < t.length(); i++)
+        {
+            char c = t.charAt(i);
+            if (c == ' ' || c == '\n' || c == '\t' || c == '\r' || c == '\f')
+            {
+                return t.substring(i + 1, t.length()).trim();
+            }
+        }
+        return t;
+    }
+
 
     /**
      * Parse up to <code>max</code> float values from the given tokens.
@@ -155,7 +235,7 @@ class Utils
         }
         return false;
     }
-
+    
 
     /**
      * Parse an int from the given string, wrapping number format

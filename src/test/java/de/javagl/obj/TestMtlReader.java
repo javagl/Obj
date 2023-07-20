@@ -3,8 +3,6 @@ package de.javagl.obj;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.Test;
@@ -51,8 +49,43 @@ public class TestMtlReader
         assertEquals(500, mtl.getNs(), FLOAT_ERROR);
         assertEquals(1.0f, mtl.getD(), FLOAT_ERROR);
         assertEquals("texture.png", mtl.getMapKd());
+        assertEquals(new DefaultFloatTuple(2,2,2), 
+            mtl.getMapKdOptions().getS());
+        
     }
 
+    @Test
+    public void readMtlWithSpaceInMapFileNames()
+        throws IOException
+    {
+        List<Mtl> mtls = MtlReader.read(getClass().getResourceAsStream(
+            "/mtlWithSpaceInMapFileNames.mtl"));
+
+        assertEquals(1, mtls.size());
+
+        Mtl mtl = mtls.get(0);
+        assertEquals("material0", mtl.getName());
+        assertEquals(new DefaultFloatTuple(1,0,0), mtl.getKa());
+        assertEquals(new DefaultFloatTuple(1,1,0), mtl.getKd());
+        assertEquals(new DefaultFloatTuple(1,1,1), mtl.getKs());
+        assertEquals(500, mtl.getNs(), FLOAT_ERROR);
+        assertEquals(123.0f, mtl.getD(), FLOAT_ERROR);
+
+        assertEquals(Boolean.TRUE, mtl.getMapKdOptions().isCc());
+        assertEquals("file name with spaces.png", mtl.getMapKd());
+
+        assertEquals(new DefaultFloatTuple(2,2,2), 
+            mtl.getMapKaOptions().getS());
+        assertEquals("directory name with spaces/file name with spaces.png", 
+            mtl.getMapKa());
+        
+        assertEquals(new DefaultFloatTuple(2,2,1), 
+            mtl.getMapKsOptions().getS());
+        assertEquals("/ another file name    .png", 
+            mtl.getMapKs());
+        
+    }
+    
     @Test
     public void readMtlWithBrokenLines()
         throws IOException
@@ -94,9 +127,19 @@ public class TestMtlReader
             "-type", "sphere",
             "texture.png"
         };
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < tokens.length; i++)
+        {
+            if (i > 0)
+            {
+                sb.append(" ");
+            }
+            sb.append(tokens[i]);
+        }
+        String textureOptionsString = sb.toString();
 
-        TextureOptions options = MtlReader.readTextureOptions(
-            new LinkedList<String>(Arrays.asList(tokens)));
+        TextureOptions options =
+            MtlReader.readTextureOptions(textureOptionsString);
 
         assertEquals(Boolean.FALSE, options.isBlendu());
         assertEquals(Boolean.FALSE, options.isBlendv());
@@ -140,8 +183,19 @@ public class TestMtlReader
         {
             "-o", "0.1", "texture.png"
         };
-        TextureOptions options = MtlReader.readTextureOptions(
-            new LinkedList<String>(Arrays.asList(tokens)));
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < tokens.length; i++)
+        {
+            if (i > 0)
+            {
+                sb.append(" ");
+            }
+            sb.append(tokens[i]);
+        }
+        String textureOptionsString = sb.toString();
+
+        TextureOptions options =
+            MtlReader.readTextureOptions(textureOptionsString);
 
         assertEquals(0.1f, options.getO().getX(), FLOAT_ERROR);
         assertEquals(0.0f, options.getO().getY(), FLOAT_ERROR);
@@ -156,8 +210,19 @@ public class TestMtlReader
         {
             "-o", "0.1", "0.2", "texture.png"
         };
-        TextureOptions options = MtlReader.readTextureOptions(
-            new LinkedList<String>(Arrays.asList(tokens)));
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < tokens.length; i++)
+        {
+            if (i > 0)
+            {
+                sb.append(" ");
+            }
+            sb.append(tokens[i]);
+        }
+        String textureOptionsString = sb.toString();
+
+        TextureOptions options =
+            MtlReader.readTextureOptions(textureOptionsString);
 
         assertEquals(0.1f, options.getO().getX(), FLOAT_ERROR);
         assertEquals(0.2f, options.getO().getY(), FLOAT_ERROR);
