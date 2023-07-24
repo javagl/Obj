@@ -37,14 +37,14 @@ final class DefaultFloatTuple implements FloatTuple
     /**
      * The values of this tuple
      */
-    private final float values[];
+    private final float[] values;
     
     /**
      * Creates a new DefaultFloatTuple with the given values
      *
      * @param values The values
      */
-    DefaultFloatTuple(float values[])
+    DefaultFloatTuple(float[] values)
     {
         this.values = values;
     }
@@ -119,7 +119,7 @@ final class DefaultFloatTuple implements FloatTuple
             DefaultFloatTuple other = (DefaultFloatTuple)f;
             return other.values.clone();
         }
-        float values[] = new float[f.getDimensions()];
+        float[] values = new float[f.getDimensions()];
         for (int i=0; i<values.length; i++)
         {
             values[i] = f.get(i);

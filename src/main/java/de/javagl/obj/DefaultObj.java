@@ -516,7 +516,7 @@ final class DefaultObj implements Obj
      * @param name The name of the index set
      * @throws IllegalArgumentException If the given indices are not valid
      */
-    private static void checkIndices(int indices[], int max, String name)
+    private static void checkIndices(int[] indices, int max, String name)
     {
         if (indices == null)
         {

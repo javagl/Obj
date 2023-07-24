@@ -39,9 +39,9 @@ public class ObjFaces
      */
     static DefaultObjFace create(ObjFace face)
     {
-        int v[] = new int[face.getNumVertices()];
-        int vt[] = null;
-        int vn[] = null;
+        int[] v = new int[face.getNumVertices()];
+        int[] vt = null;
+        int[] vn = null;
         for(int i = 0; i < face.getNumVertices(); i++)
         {
             v[i] = face.getVertexIndex(i);
@@ -84,9 +84,9 @@ public class ObjFaces
     static DefaultObjFace createWithOffsets(ObjFace face, 
         int verticesOffset, int texCoordsOffset, int normalsOffset)
     {
-        int v[] = new int[face.getNumVertices()];
-        int vt[] = null;
-        int vn[] = null;
+        int[] v = new int[face.getNumVertices()];
+        int[] vt = null;
+        int[] vn = null;
         for(int i = 0; i < face.getNumVertices(); i++)
         {
             v[i] = face.getVertexIndex(i) + verticesOffset;
@@ -128,9 +128,9 @@ public class ObjFaces
      */
     static DefaultObjFace create(ObjFace face, int ... n)
     {
-        int v[] = new int[n.length];
-        int vt[] = null;
-        int vn[] = null;
+        int[] v = new int[n.length];
+        int[] vt = null;
+        int[] vn = null;
         for(int i = 0; i < n.length; i++)
         {
             v[i] = face.getVertexIndex(n[i]);
@@ -171,7 +171,7 @@ public class ObjFaces
      * @param vn The normal indices
      * @return The face
      */
-    public static ObjFace create(int v[], int vt[], int vn[])
+    public static ObjFace create(int[] v, int[] vt, int[] vn)
     {
         return createDefault(v, vt, vn);
     }
@@ -188,7 +188,7 @@ public class ObjFaces
      * @param vn The normal indices
      * @return The face
      */
-    static DefaultObjFace createDefault(int v[], int vt[], int vn[])
+    static DefaultObjFace createDefault(int[] v, int[] vt, int[] vn)
     {
         DefaultObjFace result = new DefaultObjFace(v, vt, vn);
         return result;

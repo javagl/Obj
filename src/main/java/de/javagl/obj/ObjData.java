@@ -52,7 +52,7 @@ public class ObjData
      */
     private static int[] getNumFaceVertices(ReadableObj obj)
     {
-        int numVerticesOfFaces[] = new int[obj.getNumFaces()];
+        int[] numVerticesOfFaces = new int[obj.getNumFaces()];
         for(int i = 0; i < obj.getNumFaces(); i++)
         {
             ObjFace face = obj.getFace(i);
@@ -80,7 +80,7 @@ public class ObjData
      * @param array The array
      * @return The sum of the elements of the given array
      */
-    private static int sum(int array[])
+    private static int sum(int[] array)
     {
         int sum = 0;
         for (int i : array)
@@ -109,7 +109,7 @@ public class ObjData
      */
     public static int[] getFaceVertexIndicesArray(ReadableObj obj)
     {
-        int array[] = new int[getTotalNumFaceVertices(obj)];
+        int[] array = new int[getTotalNumFaceVertices(obj)];
         getFaceVertexIndices(obj, IntBuffer.wrap(array));
         return array;
     }
@@ -150,7 +150,7 @@ public class ObjData
     public static int[] getFaceVertexIndicesArray(
         ReadableObj obj, int numVerticesPerFace)
     {
-        int array[] = new int[obj.getNumFaces() * numVerticesPerFace];
+        int[] array = new int[obj.getNumFaces() * numVerticesPerFace];
         getFaceVertexIndices(obj, IntBuffer.wrap(array));
         return array;
     }
@@ -225,7 +225,7 @@ public class ObjData
      */
     public static int[] getFaceTexCoordIndicesArray(ReadableObj obj)
     {
-        int array[] = new int[getTotalNumFaceVertices(obj)];
+        int[] array = new int[getTotalNumFaceVertices(obj)];
         getFaceTexCoordIndices(obj, IntBuffer.wrap(array));
         return array;
     }
@@ -269,7 +269,7 @@ public class ObjData
     public static int[] getFaceTexCoordIndicesArray(
         ReadableObj obj, int numVerticesPerFace)
     {
-        int array[] = new int[obj.getNumFaces() * numVerticesPerFace];
+        int[] array = new int[obj.getNumFaces() * numVerticesPerFace];
         getFaceTexCoordIndices(obj, IntBuffer.wrap(array));
         return array;
     }
@@ -350,7 +350,7 @@ public class ObjData
      */
     public static int[] getFaceNormalIndicesArray(ReadableObj obj)
     {
-        int array[] = new int[getTotalNumFaceVertices(obj)];
+        int[] array = new int[getTotalNumFaceVertices(obj)];
         getFaceNormalIndices(obj, IntBuffer.wrap(array));
         return array;
     }
@@ -394,7 +394,7 @@ public class ObjData
     public static int[] getFaceNormalIndicesArray(
         ReadableObj obj, int numVerticesPerFace)
     {
-        int array[] = new int[obj.getNumFaces() * numVerticesPerFace];
+        int[] array = new int[obj.getNumFaces() * numVerticesPerFace];
         getFaceNormalIndices(obj, IntBuffer.wrap(array));
         return array;
     }
@@ -469,7 +469,7 @@ public class ObjData
      */
     public static float[] getVerticesArray(ReadableObj obj)
     {
-        float array[] = new float[obj.getNumVertices() * 3];
+        float[] array = new float[obj.getNumVertices() * 3];
         getVertices(obj, FloatBuffer.wrap(array));
         return array;
     }
@@ -554,7 +554,7 @@ public class ObjData
     public static float[] getTexCoordsArray(
         ReadableObj obj, int dimensions, boolean flipY)
     {
-        float array[] = new float[obj.getNumTexCoords() * dimensions];
+        float[] array = new float[obj.getNumTexCoords() * dimensions];
         getTexCoords(obj, FloatBuffer.wrap(array), dimensions, flipY);
         return array;
     }
@@ -686,7 +686,7 @@ public class ObjData
      */
     public static float[] getNormalsArray(ReadableObj obj)
     {
-        float array[] = new float[obj.getNumNormals() * 3];
+        float[] array = new float[obj.getNumNormals() * 3];
         getNormals(obj, FloatBuffer.wrap(array));
         return array;
     }

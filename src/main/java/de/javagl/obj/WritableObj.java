@@ -217,7 +217,7 @@ public interface WritableObj
      * @throws IllegalArgumentException If the given (non-null) arrays 
      * have different lengths
      */
-    void addFace(int v[], int vt[], int vn[]);
+    void addFace(int[] v, int[] vt, int[] vn);
     
     /**
      * Set the given MTL file names. A copy of the given

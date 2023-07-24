@@ -44,17 +44,17 @@ final class ObjFaceParser
     /**
      * Buffer for vertex indices
      */
-    private int vertexIndexBuffer[] = new int[INITIAL_BUFFER_SIZE];
+    private int[] vertexIndexBuffer = new int[INITIAL_BUFFER_SIZE];
 
     /**
      * Buffer for texture coordinates
      */
-    private int texCoordIndexBuffer[] = new int[INITIAL_BUFFER_SIZE];
+    private int[] texCoordIndexBuffer = new int[INITIAL_BUFFER_SIZE];
 
     /**
      * Buffer normal indices
      */
-    private int normalIndexBuffer[] = new int[INITIAL_BUFFER_SIZE];
+    private int[] normalIndexBuffer = new int[INITIAL_BUFFER_SIZE];
     
     /**
      * Flag whether texture coordinates have been found during the last
@@ -81,7 +81,7 @@ final class ObjFaceParser
     /**
      * The input array to parse
      */
-    private char lineData[];
+    private char[] lineData;
 
     
     /**

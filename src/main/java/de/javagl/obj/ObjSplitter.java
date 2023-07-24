@@ -258,9 +258,9 @@ class ObjSplitter
         final ReadableObj obj)
     {
         // Compute the projections of the centers of all faces along the axes
-        float centersX[] = computeFaceCenters(obj, 0);
-        float centersY[] = computeFaceCenters(obj, 1);
-        float centersZ[] = computeFaceCenters(obj, 2);
+        float[] centersX = computeFaceCenters(obj, 0);
+        float[] centersY = computeFaceCenters(obj, 1);
+        float[] centersZ = computeFaceCenters(obj, 2);
         
         // Compute the mean of the projections along the axes
         final float meanX = arithmeticMean(centersX);
@@ -321,7 +321,7 @@ class ObjSplitter
     private static float[] computeFaceCenters(ReadableObj obj, int component)
     {
         int n = obj.getNumFaces();
-        float result[] = new float[n];
+        float[] result = new float[n];
         for (int i = 0; i < n; i++)
         {
             ObjFace face = obj.getFace(i);
@@ -360,7 +360,7 @@ class ObjSplitter
      * @param array The input array
      * @return The mean
      */
-    private static float arithmeticMean(float array[])
+    private static float arithmeticMean(float[] array)
     {
         float sum = 0;
         for (float value : array)
@@ -377,7 +377,7 @@ class ObjSplitter
      * @param mean The mean
      * @return The variance
      */
-    private static float variance(float array[], float mean)
+    private static float variance(float[] array, float mean)
     {
         float variance = 0;
         for (int i = 0; i < array.length; i++)

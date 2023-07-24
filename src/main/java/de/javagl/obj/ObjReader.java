@@ -219,7 +219,7 @@ public class ObjReader
             else if(identifier.equals("g"))
             {
                 String s = line.substring(1).trim();
-                String groupNames[] = readStrings(s);
+                String[] groupNames = readStrings(s);
                 output.setActiveGroupNames(Arrays.asList(groupNames));
             }
 
@@ -227,9 +227,9 @@ public class ObjReader
             else if(identifier.equals("f"))
             {
                 objFaceParser.parse(line);
-                int v[] = objFaceParser.getVertexIndices();
-                int vt[] = objFaceParser.getTexCoordIndices();
-                int vn[] = objFaceParser.getNormalIndices();
+                int[] v = objFaceParser.getVertexIndices();
+                int[] vt = objFaceParser.getTexCoordIndices();
+                int[] vn = objFaceParser.getNormalIndices();
                 makeIndicesAbsolute(v, vertexCounter);
                 makeIndicesAbsolute(vt, texCoordCounter);
                 makeIndicesAbsolute(vn, normalCounter);
@@ -248,7 +248,7 @@ public class ObjReader
      * be done
      * @param count The count
      */
-    private static void makeIndicesAbsolute(int array[], int count)
+    private static void makeIndicesAbsolute(int[] array, int count)
     {
         if (array == null)
         {

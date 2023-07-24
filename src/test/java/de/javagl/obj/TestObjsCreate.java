@@ -15,28 +15,28 @@ public class TestObjsCreate
     public void createFromIndexedTriangleData() 
         throws IOException
     {
-        float vertices[] = 
+        float[] vertices =
         {
             0,0,0,
             1,0,0,
             1,1,0,
             0,1,0,
         };
-        float texCoords[] = 
+        float[] texCoords =
         {
             0,0,
             1,0,
             1,1,
             0,1,
         };
-        float normals[] = 
+        float[] normals =
         {
             0,0,1,
             0,0,1,
             0,0,1,
             0,0,1,
         };
-        int indices[] = 
+        int[] indices =
         {   
             0,1,3,
             0,1,2

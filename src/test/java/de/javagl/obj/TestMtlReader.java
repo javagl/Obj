@@ -77,7 +77,7 @@ public class TestMtlReader
         throws IOException
     {
 
-        String tokens[] = new String[]
+        String[] tokens = new String[]
         {
             "-blendu", "off",
             "-blendv", "off",
@@ -136,7 +136,7 @@ public class TestMtlReader
     public void readTextureOptionsWithSingleOriginOffsetValue()
         throws IOException
     {
-        String tokens[] = new String[]
+        String[] tokens = new String[]
         {
             "-o", "0.1", "texture.png"
         };
@@ -152,7 +152,7 @@ public class TestMtlReader
     public void readTextureOptionsWithDoubleOriginOffsetValue()
         throws Exception
     {
-        String tokens[] = new String[]
+        String[] tokens = new String[]
         {
             "-o", "0.1", "0.2", "texture.png"
         };
