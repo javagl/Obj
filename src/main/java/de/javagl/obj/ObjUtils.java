@@ -496,7 +496,7 @@ public class ObjUtils
         
         int[] usedPropertyIndices = new int[input.getNumVertices()];
         Arrays.fill(usedPropertyIndices, -1);
-        List<FloatTuple> extendedVertices = new ArrayList<FloatTuple>();
+        List<FloatTuple> extendedVertices = new ArrayList<>();
 
         for(int i = 0; i < input.getNumFaces(); i++)
         {

@@ -91,7 +91,7 @@ public class MtlReader
     private static List<Mtl> readImpl(BufferedReader reader)
         throws IOException
     {
-        List<Mtl> mtlList = new ArrayList<Mtl>();
+        List<Mtl> mtlList = new ArrayList<>();
 
         Mtl currentMtl = null;
 
@@ -157,7 +157,7 @@ public class MtlReader
         throws IOException
     {
         Queue<String> tokens =
-            new LinkedList<String>(Arrays.asList(line.split("[ \t\n\r\f]+")));
+                new LinkedList<>(Arrays.asList(line.split("[ \t\n\r\f]+")));
         String command = tokens.poll();
 
         // Illumination mode

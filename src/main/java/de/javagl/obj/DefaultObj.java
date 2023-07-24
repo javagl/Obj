@@ -140,19 +140,19 @@ final class DefaultObj implements Obj
      */
     DefaultObj()
     {
-        vertices = new ArrayList<FloatTuple>();
-        normals = new ArrayList<FloatTuple>();
-        texCoords = new ArrayList<FloatTuple>();
-        faces = new ArrayList<ObjFace>();
+        vertices = new ArrayList<>();
+        normals = new ArrayList<>();
+        texCoords = new ArrayList<>();
+        faces = new ArrayList<>();
 
-        groups = new ArrayList<ObjGroup>();
-        materialGroups = new ArrayList<ObjGroup>();
+        groups = new ArrayList<>();
+        materialGroups = new ArrayList<>();
 
-        groupMap = new LinkedHashMap<String, DefaultObjGroup>();
-        materialGroupMap = new LinkedHashMap<String, DefaultObjGroup>();
+        groupMap = new LinkedHashMap<>();
+        materialGroupMap = new LinkedHashMap<>();
         
-        startedGroupNames = new HashMap<ObjFace, Set<String>>();
-        startedMaterialGroupNames = new HashMap<ObjFace, String>();
+        startedGroupNames = new HashMap<>();
+        startedMaterialGroupNames = new HashMap<>();
         
         setActiveGroupNames(Arrays.asList("default"));
         getGroupInternal("default");
@@ -456,8 +456,8 @@ final class DefaultObj implements Obj
     private List<DefaultObjGroup> getGroupsInternal(
         Collection<? extends String> groupNames)
     {
-        List<DefaultObjGroup> groups = 
-            new ArrayList<DefaultObjGroup>(groupNames.size());
+        List<DefaultObjGroup> groups =
+                new ArrayList<>(groupNames.size());
         for (String groupName : groupNames)
         {
             DefaultObjGroup group = getGroupInternal(groupName);

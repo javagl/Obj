@@ -278,7 +278,7 @@ public class ObjReader
     private static String[] readStrings(String input)
     {
         StringTokenizer st = new StringTokenizer(input);
-        List<String> tokens = new ArrayList<String>();
+        List<String> tokens = new ArrayList<>();
         while (st.hasMoreTokens())
         {
             tokens.add(st.nextToken());

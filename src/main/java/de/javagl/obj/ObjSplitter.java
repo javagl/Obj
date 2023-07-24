@@ -118,7 +118,7 @@ class ObjSplitter
         while (didSplit)
         {
             didSplit = false;
-            List<Obj> nextObjs = new ArrayList<Obj>();
+            List<Obj> nextObjs = new ArrayList<>();
             for (Obj currentObj : currentObjs)
             {
                 if (splitPredicate.test(currentObj))
@@ -154,8 +154,8 @@ class ObjSplitter
             "Splitting OBJ with " + obj.getNumVertices() + " vertices");
 
         Predicate<ObjFace> facePredicate = computeFacePredicate(obj);
-        List<ObjFace> faces0 = new ArrayList<ObjFace>();
-        List<ObjFace> faces1 = new ArrayList<ObjFace>();
+        List<ObjFace> faces0 = new ArrayList<>();
+        List<ObjFace> faces1 = new ArrayList<>();
         for (int i = 0; i < obj.getNumFaces(); i++)
         {
             ObjFace face = obj.getFace(i);

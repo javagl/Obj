@@ -46,7 +46,7 @@ public class ObjSplitting
      */
     public static Map<String, Obj> splitByGroups(ReadableObj obj)
     {
-        Map<String, Obj> objs = new LinkedHashMap<String, Obj>();
+        Map<String, Obj> objs = new LinkedHashMap<>();
         int numGroups = obj.getNumGroups();
         for (int i = 0; i < numGroups; i++)
         {
@@ -81,7 +81,7 @@ public class ObjSplitting
      */
     public static Map<String, Obj> splitByMaterialGroups(ReadableObj obj)
     {
-        Map<String, Obj> objs = new LinkedHashMap<String, Obj>();
+        Map<String, Obj> objs = new LinkedHashMap<>();
         int numMaterialGroups = obj.getNumMaterialGroups();
         for (int i = 0; i < numMaterialGroups; i++)
         {
