@@ -45,7 +45,7 @@ public interface Mtl
 
     /**
      * Returns the illumination mode (<code>-illum</code>) of the material,
-     * or <code>null</code> if it was was not specified
+     * or <code>null</code> if it was not specified
      *
      * @return The illumination mode of the material.
      */
@@ -75,7 +75,7 @@ public interface Mtl
 
     /**
      * Returns the transmission filter of the material,
-     * or <code>null</code> if it was was not specified
+     * or <code>null</code> if it was not specified
      *
      * @return The transmission filter
      */
@@ -92,7 +92,7 @@ public interface Mtl
 
     /**
      * Returns the sharpness of reflections from the reflection map,
-     * or <code>null</code> if it was was not specified
+     * or <code>null</code> if it was not specified
      *
      * @return The sharpness
      */

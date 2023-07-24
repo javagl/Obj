@@ -739,7 +739,7 @@ public class ObjData
      * input buffer that is larger than the maximum value that a 
      * <b>signed</b> <code>short</code> can represent, then the 
      * <code>short</code> value will become negative. The resulting buffer 
-     * will then still be valid for passing the it to OpenGL when the index 
+     * will then still be valid for passing it to OpenGL when the index
      * mode is <code>GL_UNSIGNED_SHORT</code>, because the bitwise 
      * representation is the same. When one of the integer values is larger 
      * than the value that can be represented with an <b>unsigned</b>
