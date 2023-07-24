@@ -380,9 +380,8 @@ class ObjSplitter
     private static float variance(float[] array, float mean)
     {
         float variance = 0;
-        for (int i = 0; i < array.length; i++)
-        {
-            double difference = array[i] - mean;
+        for (float v : array) {
+            double difference = v - mean;
             variance += difference * difference;
         }
         return variance / (array.length - 1);

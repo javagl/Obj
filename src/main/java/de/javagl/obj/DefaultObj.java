@@ -522,18 +522,15 @@ final class DefaultObj implements Obj
         {
             return;
         }
-        for (int i=0; i<indices.length; i++)
-        {
-            if (indices[i] < 0)
-            {
+        for (int index : indices) {
+            if (index < 0) {
                 throw new IllegalArgumentException(
-                    name+" index is negative: "+indices[i]);
+                        name + " index is negative: " + index);
             }
-            if (indices[i] >= max)
-            {
+            if (index >= max) {
                 throw new IllegalArgumentException(
-                    name+" index is "+indices[i]+
-                    ", but must be smaller than "+max);
+                        name + " index is " + index +
+                                ", but must be smaller than " + max);
             }
         }
     }
