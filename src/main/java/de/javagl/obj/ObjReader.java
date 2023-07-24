@@ -172,68 +172,65 @@ public class ObjReader
             String identifier = st.nextToken().toLowerCase();
 
             // v: Vertex coordinates
-            if(identifier.equals("v"))
-            {
-                output.addVertex(Utils.readFloatTuple(st));
-                vertexCounter++;
-            }
+            switch (identifier) {
+                case "v":
+                    output.addVertex(Utils.readFloatTuple(st));
+                    vertexCounter++;
+                    break;
 
-            // vt: Texture coordinates for a vertex
-            else if(identifier.equals("vt"))
-            {
-                output.addTexCoord(Utils.readFloatTuple(st));
-                texCoordCounter++;
-            }
+                // vt: Texture coordinates for a vertex
+                case "vt":
+                    output.addTexCoord(Utils.readFloatTuple(st));
+                    texCoordCounter++;
+                    break;
 
-            // vn: Vertex normal
-            else if(identifier.equals("vn"))
-            {
-                output.addNormal(Utils.readFloatTuple(st));
-                normalCounter++;
-            }
+                // vn: Vertex normal
+                case "vn":
+                    output.addNormal(Utils.readFloatTuple(st));
+                    normalCounter++;
+                    break;
 
-            // mtllib: Name of the MTL file
-            else if(identifier.equals("mtllib"))
-            {
-                String s = line.substring(6).trim();
-                //output.setMtlFileNames(readStrings(s));
-                // According to the OBJ specification, the "mtllib" keyword
-                // may be followed by multiple file names, separated with
-                // whitespaces:
-                // "When you assign a material library using the Model
-                //  program, only one map library per .obj file is allowed.
-                //  You can assign multiple libraries using a text editor."
-                // However, to avoid problems with file names that contain
-                // whitespaces, only ONE file name is assumed here:
-                output.setMtlFileNames(Collections.singleton(s));
-            }
+                // mtllib: Name of the MTL file
+                case "mtllib": {
+                    String s = line.substring(6).trim();
+                    //output.setMtlFileNames(readStrings(s));
+                    // According to the OBJ specification, the "mtllib" keyword
+                    // may be followed by multiple file names, separated with
+                    // whitespaces:
+                    // "When you assign a material library using the Model
+                    //  program, only one map library per .obj file is allowed.
+                    //  You can assign multiple libraries using a text editor."
+                    // However, to avoid problems with file names that contain
+                    // whitespaces, only ONE file name is assumed here:
+                    output.setMtlFileNames(Collections.singleton(s));
+                    break;
+                }
 
-            // usemtl: Material groups
-            else if(identifier.equals("usemtl"))
-            {
-                String materialGroupName = line.substring(6).trim();
-                output.setActiveMaterialGroupName(materialGroupName);
-            }
+                // usemtl: Material groups
+                case "usemtl":
+                    String materialGroupName = line.substring(6).trim();
+                    output.setActiveMaterialGroupName(materialGroupName);
+                    break;
 
-            // g: Geometry groups
-            else if(identifier.equals("g"))
-            {
-                String s = line.substring(1).trim();
-                String[] groupNames = readStrings(s);
-                output.setActiveGroupNames(Arrays.asList(groupNames));
-            }
+                // g: Geometry groups
+                case "g": {
+                    String s = line.substring(1).trim();
+                    String[] groupNames = readStrings(s);
+                    output.setActiveGroupNames(Arrays.asList(groupNames));
+                    break;
+                }
 
-            // f: A face definition
-            else if(identifier.equals("f"))
-            {
-                objFaceParser.parse(line);
-                int[] v = objFaceParser.getVertexIndices();
-                int[] vt = objFaceParser.getTexCoordIndices();
-                int[] vn = objFaceParser.getNormalIndices();
-                makeIndicesAbsolute(v, vertexCounter);
-                makeIndicesAbsolute(vt, texCoordCounter);
-                makeIndicesAbsolute(vn, normalCounter);
-                output.addFace(ObjFaces.create(v, vt, vn));
+                // f: A face definition
+                case "f":
+                    objFaceParser.parse(line);
+                    int[] v = objFaceParser.getVertexIndices();
+                    int[] vt = objFaceParser.getTexCoordIndices();
+                    int[] vn = objFaceParser.getNormalIndices();
+                    makeIndicesAbsolute(v, vertexCounter);
+                    makeIndicesAbsolute(vt, texCoordCounter);
+                    makeIndicesAbsolute(vn, normalCounter);
+                    output.addFace(ObjFaces.create(v, vt, vn));
+                    break;
             }
         }
         return output;
