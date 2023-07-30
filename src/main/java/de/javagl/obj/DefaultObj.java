@@ -140,19 +140,19 @@ final class DefaultObj implements Obj
      */
     DefaultObj()
     {
-        vertices = new ArrayList<FloatTuple>();
-        normals = new ArrayList<FloatTuple>();
-        texCoords = new ArrayList<FloatTuple>();
-        faces = new ArrayList<ObjFace>();
+        vertices = new ArrayList<>();
+        normals = new ArrayList<>();
+        texCoords = new ArrayList<>();
+        faces = new ArrayList<>();
 
-        groups = new ArrayList<ObjGroup>();
-        materialGroups = new ArrayList<ObjGroup>();
+        groups = new ArrayList<>();
+        materialGroups = new ArrayList<>();
 
-        groupMap = new LinkedHashMap<String, DefaultObjGroup>();
-        materialGroupMap = new LinkedHashMap<String, DefaultObjGroup>();
+        groupMap = new LinkedHashMap<>();
+        materialGroupMap = new LinkedHashMap<>();
         
-        startedGroupNames = new HashMap<ObjFace, Set<String>>();
-        startedMaterialGroupNames = new HashMap<ObjFace, String>();
+        startedGroupNames = new HashMap<>();
+        startedMaterialGroupNames = new HashMap<>();
         
         setActiveGroupNames(Arrays.asList("default"));
         getGroupInternal("default");
@@ -456,8 +456,8 @@ final class DefaultObj implements Obj
     private List<DefaultObjGroup> getGroupsInternal(
         Collection<? extends String> groupNames)
     {
-        List<DefaultObjGroup> groups = 
-            new ArrayList<DefaultObjGroup>(groupNames.size());
+        List<DefaultObjGroup> groups =
+                new ArrayList<>(groupNames.size());
         for (String groupName : groupNames)
         {
             DefaultObjGroup group = getGroupInternal(groupName);
@@ -516,24 +516,21 @@ final class DefaultObj implements Obj
      * @param name The name of the index set
      * @throws IllegalArgumentException If the given indices are not valid
      */
-    private static void checkIndices(int indices[], int max, String name)
+    private static void checkIndices(int[] indices, int max, String name)
     {
         if (indices == null)
         {
             return;
         }
-        for (int i=0; i<indices.length; i++)
-        {
-            if (indices[i] < 0)
-            {
+        for (int index : indices) {
+            if (index < 0) {
                 throw new IllegalArgumentException(
-                    name+" index is negative: "+indices[i]);
+                        name + " index is negative: " + index);
             }
-            if (indices[i] >= max)
-            {
+            if (index >= max) {
                 throw new IllegalArgumentException(
-                    name+" index is "+indices[i]+
-                    ", but must be smaller than "+max);
+                        name + " index is " + index +
+                                ", but must be smaller than " + max);
             }
         }
     }

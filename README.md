@@ -53,7 +53,7 @@ that it may easily be rendered with OpenGL. These methods may...
 
  - convert a single group of an OBJ into a new OBJ
  - triangulate OBJ data
- - make sure that texture coordinates or or normal coordinates are unique
+ - make sure that texture coordinates or normal coordinates are unique
    for each vertex
  - convert an OBJ to an OBJ that is uses the same index sets for vertices,
    texture coordinates and normals

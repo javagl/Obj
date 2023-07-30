@@ -201,9 +201,9 @@ public class ObjUtils
 
         // vertexIndexMap[i] contains the index that vertex i of the 
         // original Obj will have in the output
-        int vertexIndexMap[] = new int[input.getNumVertices()];
-        int texCoordIndexMap[] = new int[input.getNumTexCoords()];
-        int normalIndexMap[] = new int[input.getNumNormals()];
+        int[] vertexIndexMap = new int[input.getNumVertices()];
+        int[] texCoordIndexMap = new int[input.getNumTexCoords()];
+        int[] normalIndexMap = new int[input.getNumNormals()];
 
         Arrays.fill(vertexIndexMap, -1);
         Arrays.fill(texCoordIndexMap, -1);
@@ -329,7 +329,7 @@ public class ObjUtils
      * Two faces may reference the same vertex in the OBJ file. But different 
      * texture coordinates may be assigned to the same vertex in 
      * both faces. The vertex that requires two different properties will be 
-     * be duplicated in the output, and the indices in one face will be updated 
+     * duplicated in the output, and the indices in one face will be updated
      * appropriately.<br>
      * <br>
      * This process solely operates on the <i>indices</i> of the properties.
@@ -351,7 +351,7 @@ public class ObjUtils
      * Two faces may reference the same vertex in the OBJ file. But different 
      * texture coordinates may be assigned to the same vertex in 
      * both faces. The vertex that requires two different properties will be 
-     * be duplicated in the output, and the indices in one face will be updated 
+     * duplicated in the output, and the indices in one face will be updated
      * appropriately.<br>
      * <br>
      * This process solely operates on the <i>indices</i> of the properties.
@@ -399,7 +399,7 @@ public class ObjUtils
      * Two faces may reference the same vertex in the OBJ file. But different 
      * normals may be assigned to the same vertex in 
      * both faces. The vertex that requires two different properties will be 
-     * be duplicated in the output, and the indices in one face will be updated 
+     * duplicated in the output, and the indices in one face will be updated
      * appropriately.<br>
      * <br>
      * This process solely operates on the <i>indices</i> of the properties.
@@ -422,7 +422,7 @@ public class ObjUtils
      * Two faces may reference the same vertex in the OBJ file. But different 
      * normals may be assigned to the same vertex in 
      * both faces. The vertex that requires two different properties will be 
-     * be duplicated in the output, and the indices in one face will be updated 
+     * duplicated in the output, and the indices in one face will be updated
      * appropriately.<br>
      * <br>
      * This process solely operates on the <i>indices</i> of the properties.
@@ -470,7 +470,7 @@ public class ObjUtils
      * Two faces may reference the same vertex in the OBJ file. But different 
      * normals or texture coordinates may be assigned to the same vertex in 
      * both faces. The vertex that requires two different properties will be 
-     * be duplicated in the output, and the indices in one face will be updated 
+     * duplicated in the output, and the indices in one face will be updated
      * appropriately.<br>
      * <br>
      * This process solely operates on the <i>indices</i> of the properties.
@@ -494,9 +494,9 @@ public class ObjUtils
         output.setMtlFileNames(input.getMtlFileNames());
         addAll(input, output);
         
-        int usedPropertyIndices[] = new int[input.getNumVertices()];
+        int[] usedPropertyIndices = new int[input.getNumVertices()];
         Arrays.fill(usedPropertyIndices, -1);
-        List<FloatTuple> extendedVertices = new ArrayList<FloatTuple>();
+        List<FloatTuple> extendedVertices = new ArrayList<>();
 
         for(int i = 0; i < input.getNumFaces(); i++)
         {
@@ -673,8 +673,8 @@ public class ObjUtils
         
         boolean foundTexCoords = false;
         boolean foundNormals = false;
-        int texCoordIndicesForVertexIndices[] = new int[input.getNumVertices()];
-        int normalIndicesForVertexIndices[] = new int[input.getNumVertices()];
+        int[] texCoordIndicesForVertexIndices = new int[input.getNumVertices()];
+        int[] normalIndicesForVertexIndices = new int[input.getNumVertices()];
         for(int i = 0; i < input.getNumFaces(); i++)
         {
             ObjFace inputFace = input.getFace(i);

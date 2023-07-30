@@ -112,9 +112,9 @@ public class Objs
             int i1 = indices.get(i * 3 + 1);
             int i2 = indices.get(i * 3 + 2);
 
-            int v[] = { i0, i1, i2 };
-            int vt[] = null;
-            int vn[] = null;
+            int[] v = { i0, i1, i2 };
+            int[] vt = null;
+            int[] vn = null;
             if (texCoords != null)
             {
                 vt = v;

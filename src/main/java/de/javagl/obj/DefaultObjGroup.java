@@ -53,7 +53,7 @@ final class DefaultObjGroup implements ObjGroup
     DefaultObjGroup(String name)
     {
         this.name = name;
-        faces = new ArrayList<ObjFace>();
+        faces = new ArrayList<>();
     }
 
     @Override

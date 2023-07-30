@@ -122,7 +122,7 @@ class Utils
      */
     static Float[] parseFloats(Queue<String> tokens, int max)
     {
-        Float result[] = new Float[max];
+        Float[] result = new Float[max];
         for (int i = 0; i < max; i++)
         {
             String token = tokens.poll();

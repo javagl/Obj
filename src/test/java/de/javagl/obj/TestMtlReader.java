@@ -77,7 +77,7 @@ public class TestMtlReader
         throws IOException
     {
 
-        String tokens[] = new String[]
+        String[] tokens = new String[]
         {
             "-blendu", "off",
             "-blendv", "off",
@@ -96,7 +96,7 @@ public class TestMtlReader
         };
 
         TextureOptions options = MtlReader.readTextureOptions(
-            new LinkedList<String>(Arrays.asList(tokens)));
+                new LinkedList<>(Arrays.asList(tokens)));
 
         assertEquals(Boolean.FALSE, options.isBlendu());
         assertEquals(Boolean.FALSE, options.isBlendv());
@@ -136,12 +136,12 @@ public class TestMtlReader
     public void readTextureOptionsWithSingleOriginOffsetValue()
         throws IOException
     {
-        String tokens[] = new String[]
+        String[] tokens = new String[]
         {
             "-o", "0.1", "texture.png"
         };
         TextureOptions options = MtlReader.readTextureOptions(
-            new LinkedList<String>(Arrays.asList(tokens)));
+                new LinkedList<>(Arrays.asList(tokens)));
 
         assertEquals(0.1f, options.getO().getX(), FLOAT_ERROR);
         assertEquals(0.0f, options.getO().getY(), FLOAT_ERROR);
@@ -152,12 +152,12 @@ public class TestMtlReader
     public void readTextureOptionsWithDoubleOriginOffsetValue()
         throws Exception
     {
-        String tokens[] = new String[]
+        String[] tokens = new String[]
         {
             "-o", "0.1", "0.2", "texture.png"
         };
         TextureOptions options = MtlReader.readTextureOptions(
-            new LinkedList<String>(Arrays.asList(tokens)));
+                new LinkedList<>(Arrays.asList(tokens)));
 
         assertEquals(0.1f, options.getO().getX(), FLOAT_ERROR);
         assertEquals(0.2f, options.getO().getY(), FLOAT_ERROR);

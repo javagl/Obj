@@ -36,17 +36,17 @@ final class DefaultObjFace implements ObjFace
     /**
      * The vertex indices of this face
      */
-    private final int vertexIndices[];
+    private final int[] vertexIndices;
     
     /**
      * The texture coordinate indices of this face
      */
-    private final int texCoordIndices[];
+    private final int[] texCoordIndices;
     
     /**
      * The normal indices of this face
      */
-    private final int normalIndices[];
+    private final int[] normalIndices;
 
     /**
      * Creates a face from the given parameters. References to the
@@ -57,7 +57,7 @@ final class DefaultObjFace implements ObjFace
      * @param normalIndices The normal indices
      */
     DefaultObjFace(
-        int vertexIndices[], int texCoordIndices[], int normalIndices[])
+            int[] vertexIndices, int[] texCoordIndices, int[] normalIndices)
     {
         this.vertexIndices = vertexIndices;
         this.texCoordIndices = texCoordIndices;
