@@ -53,7 +53,8 @@ public class ObjData
     private static int[] getNumFaceVertices(ReadableObj obj)
     {
         int[] numVerticesOfFaces = new int[obj.getNumFaces()];
-        for(int i = 0; i < obj.getNumFaces(); i++)
+        int faces = obj.getNumFaces();
+        for(int i = 0; i < faces; i++)
         {
             ObjFace face = obj.getFace(i);
             numVerticesOfFaces[i] = face.getNumVertices();
@@ -110,7 +111,7 @@ public class ObjData
     public static int[] getFaceVertexIndicesArray(ReadableObj obj)
     {
         int[] array = new int[getTotalNumFaceVertices(obj)];
-        getFaceVertexIndices(obj, IntBuffer.wrap(array));
+        getFaceVertexIndices(obj, array);
         return array;
     }
 
@@ -131,8 +132,9 @@ public class ObjData
      */
     public static IntBuffer getFaceVertexIndices(ReadableObj obj)
     {
-        IntBuffer buffer = createDirectIntBuffer(getTotalNumFaceVertices(obj));
-        getFaceVertexIndices(obj, buffer);
+        int[] array = getFaceVertexIndicesArray(obj);
+        IntBuffer buffer = createDirectIntBuffer(array.length);
+        buffer.put(array);
         buffer.position(0);
         return buffer;
     }
@@ -151,7 +153,7 @@ public class ObjData
         ReadableObj obj, int numVerticesPerFace)
     {
         int[] array = new int[obj.getNumFaces() * numVerticesPerFace];
-        getFaceVertexIndices(obj, IntBuffer.wrap(array));
+        getFaceVertexIndices(obj, array);
         return array;
     }
     
@@ -170,9 +172,9 @@ public class ObjData
     public static IntBuffer getFaceVertexIndices(
         ReadableObj obj, int numVerticesPerFace)
     {
-        IntBuffer buffer = createDirectIntBuffer(
-            obj.getNumFaces() * numVerticesPerFace);
-        getFaceVertexIndices(obj, buffer);
+        int[] array = getFaceVertexIndicesArray(obj, numVerticesPerFace);
+        IntBuffer buffer = createDirectIntBuffer(array.length);
+        buffer.put(array);
         buffer.position(0);
         return buffer;
     }
@@ -193,14 +195,16 @@ public class ObjData
      * @throws BufferOverflowException If the buffer can not store the result
      */
     public static void getFaceVertexIndices(
-        ReadableObj obj, IntBuffer target)
+        ReadableObj obj, int[] target)
     {
-        for(int i = 0; i < obj.getNumFaces(); i++)
+        int position = 0;
+        int faces = obj.getNumFaces();
+        for(int i = 0; i < faces; i++)
         {
             ObjFace face = obj.getFace(i);
-            for (int j=0; j<face.getNumVertices(); j++)
-            {
-                target.put(face.getVertexIndex(j));
+            int vertices = face.getNumVertices();
+            for(int j = 0; j < vertices; j++) {
+                target[position++] = face.getVertexIndex(j);
             }
         }
     }
@@ -226,7 +230,7 @@ public class ObjData
     public static int[] getFaceTexCoordIndicesArray(ReadableObj obj)
     {
         int[] array = new int[getTotalNumFaceVertices(obj)];
-        getFaceTexCoordIndices(obj, IntBuffer.wrap(array));
+        getFaceTexCoordIndices(obj, array);
         return array;
     }
     
@@ -247,8 +251,9 @@ public class ObjData
      */
     public static IntBuffer getFaceTexCoordIndices(ReadableObj obj)
     {
-        IntBuffer buffer = createDirectIntBuffer(getTotalNumFaceVertices(obj));
-        getFaceTexCoordIndices(obj, buffer);
+        int[] array = getFaceTexCoordIndicesArray(obj);
+        IntBuffer buffer = createDirectIntBuffer(array.length);
+        buffer.put(array);
         buffer.position(0);
         return buffer;
     }
@@ -270,7 +275,7 @@ public class ObjData
         ReadableObj obj, int numVerticesPerFace)
     {
         int[] array = new int[obj.getNumFaces() * numVerticesPerFace];
-        getFaceTexCoordIndices(obj, IntBuffer.wrap(array));
+        getFaceTexCoordIndices(obj, array);
         return array;
     }
     
@@ -292,9 +297,9 @@ public class ObjData
     public static IntBuffer getFaceTexCoordIndices(
         ReadableObj obj, int numVerticesPerFace)
     {
-        IntBuffer buffer = createDirectIntBuffer(
-            obj.getNumFaces() * numVerticesPerFace);
-        getFaceTexCoordIndices(obj, buffer);
+        int[] array = getFaceTexCoordIndicesArray(obj, numVerticesPerFace);
+        IntBuffer buffer = createDirectIntBuffer(array.length);
+        buffer.put(array);
         buffer.position(0);
         return buffer;
     }
@@ -319,14 +324,17 @@ public class ObjData
      * @throws BufferOverflowException If the buffer can not store the result
      */
     public static void getFaceTexCoordIndices(
-        ReadableObj obj, IntBuffer target)
+        ReadableObj obj, int[] target)
     {
-        for(int i = 0; i < obj.getNumFaces(); i++)
+        int position = 0;
+        int faces = obj.getNumFaces();
+        for(int i = 0; i < faces; i++)
         {
             ObjFace face = obj.getFace(i);
-            for (int j=0; j<face.getNumVertices(); j++)
+            int vertices = face.getNumVertices();
+            for (int j=0; j<vertices; j++)
             {
-                target.put(face.getTexCoordIndex(j));
+                target[position++] = face.getTexCoordIndex(j);
             }
         }
     }
@@ -351,7 +359,7 @@ public class ObjData
     public static int[] getFaceNormalIndicesArray(ReadableObj obj)
     {
         int[] array = new int[getTotalNumFaceVertices(obj)];
-        getFaceNormalIndices(obj, IntBuffer.wrap(array));
+        getFaceNormalIndices(obj, array);
         return array;
     }
 
@@ -372,8 +380,9 @@ public class ObjData
      */
     public static IntBuffer getFaceNormalIndices(ReadableObj obj)
     {
-        IntBuffer buffer = createDirectIntBuffer(getTotalNumFaceVertices(obj));
-        getFaceNormalIndices(obj, buffer);
+        int[] array = getFaceNormalIndicesArray(obj);
+        IntBuffer buffer = createDirectIntBuffer(array.length);
+        buffer.put(array);
         buffer.position(0);
         return buffer;
     }
@@ -395,7 +404,7 @@ public class ObjData
         ReadableObj obj, int numVerticesPerFace)
     {
         int[] array = new int[obj.getNumFaces() * numVerticesPerFace];
-        getFaceNormalIndices(obj, IntBuffer.wrap(array));
+        getFaceNormalIndices(obj, array);
         return array;
     }
 
@@ -417,9 +426,9 @@ public class ObjData
     public static IntBuffer getFaceNormalIndices(
         ReadableObj obj, int numVerticesPerFace)
     {
-        IntBuffer buffer = createDirectIntBuffer(
-            obj.getNumFaces() * numVerticesPerFace);
-        getFaceNormalIndices(obj, buffer);
+        int[] array = getFaceNormalIndicesArray(obj, numVerticesPerFace);
+        IntBuffer buffer = createDirectIntBuffer(array.length);
+        buffer.put(array);
         buffer.position(0);
         return buffer;
     }
@@ -444,14 +453,17 @@ public class ObjData
      * @throws BufferOverflowException If the buffer can not store the result
      */
     public static void getFaceNormalIndices(
-        ReadableObj obj, IntBuffer target)
+        ReadableObj obj, int[] target)
     {
-        for(int i = 0; i < obj.getNumFaces(); i++)
+        int position = 0;
+        int faces = obj.getNumFaces();
+        for(int i = 0; i < faces; i++)
         {
             ObjFace face = obj.getFace(i);
-            for (int j=0; j<face.getNumVertices(); j++)
+            int vertices = face.getNumVertices();
+            for (int j=0; j<vertices; j++)
             {
-                target.put(face.getNormalIndex(j));
+                target[position++] = face.getNormalIndex(j);
             }
         }
     }
@@ -470,7 +482,7 @@ public class ObjData
     public static float[] getVerticesArray(ReadableObj obj)
     {
         float[] array = new float[obj.getNumVertices() * 3];
-        getVertices(obj, FloatBuffer.wrap(array));
+        getVertices(obj, array);
         return array;
     }
 
@@ -487,8 +499,9 @@ public class ObjData
      */
     public static FloatBuffer getVertices(ReadableObj obj)
     {
-        FloatBuffer buffer = createDirectFloatBuffer(obj.getNumVertices() * 3);
-        getVertices(obj, buffer);
+        float[] array = getVerticesArray(obj);
+        FloatBuffer buffer = createDirectFloatBuffer(array.length);
+        buffer.put(array);
         buffer.position(0);
         return buffer;
     }
@@ -504,14 +517,17 @@ public class ObjData
      * @throws BufferOverflowException If the target can not store the result
      */
     public static void getVertices(
-        ReadableObj obj, FloatBuffer target)
+        ReadableObj obj, float[] target)
     {
-        for(int i = 0; i < obj.getNumVertices(); i++)
+        int position = 0;
+        int vertices = obj.getNumVertices();
+        for(int i = 0; i < vertices; i++)
         {
             FloatTuple tuple = obj.getVertex(i);
-            target.put(tuple.getX());
-            target.put(tuple.getY());
-            target.put(tuple.getZ());
+            float[] values = tuple.getValues();
+            target[position++] = values[0];
+            target[position++] = values[1];
+            target[position++] = values[2];
         }
     }
     
@@ -555,7 +571,7 @@ public class ObjData
         ReadableObj obj, int dimensions, boolean flipY)
     {
         float[] array = new float[obj.getNumTexCoords() * dimensions];
-        getTexCoords(obj, FloatBuffer.wrap(array), dimensions, flipY);
+        getTexCoords(obj, array, dimensions, flipY);
         return array;
     }
     
@@ -595,9 +611,9 @@ public class ObjData
     public static FloatBuffer getTexCoords(
         ReadableObj obj, int dimensions, boolean flipY)
     {
-        FloatBuffer buffer = 
-            createDirectFloatBuffer(obj.getNumTexCoords() * dimensions);
-        getTexCoords(obj, buffer, dimensions, flipY);
+        float[] array = getTexCoordsArray(obj, dimensions, flipY);
+        FloatBuffer buffer = createDirectFloatBuffer(array.length);
+        buffer.put(array);
         buffer.position(0);
         return buffer;
     }
@@ -617,7 +633,9 @@ public class ObjData
     public static void getTexCoords(
         ReadableObj obj, FloatBuffer target, int dimensions)
     {
-        getTexCoords(obj, target, dimensions, false);
+        float[] array = getTexCoordsArray(obj, dimensions, false);
+        target.position(0);
+        target.put(array);
     }
 
     /**
@@ -640,34 +658,36 @@ public class ObjData
      * @throws BufferOverflowException If the target can not store the result
      */
     public static void getTexCoords(
-        ReadableObj obj, FloatBuffer target, int dimensions, boolean flipY)
+        ReadableObj obj, float[] target, int dimensions, boolean flipY)
     {
-        if (flipY) 
+        int position = 0;
+		int numTexCoords = obj.getNumTexCoords();
+		if (flipY)
         {
-            for(int i = 0; i < obj.getNumTexCoords(); i++)
+			for(int i = 0; i < numTexCoords; i++)
             {
                 FloatTuple tuple = obj.getTexCoord(i);
                 for (int j=0; j<dimensions; j++)
                 {
                     if (j == 1) 
                     {
-                        target.put(1.0f - tuple.get(j));
+                        target[position++] = 1.0f - tuple.get(j);
                     }
                     else
                     {
-                        target.put(tuple.get(j));
+                        target[position++] = tuple.get(j);
                     }
                 }
             }
         }
         else
         {
-            for(int i = 0; i < obj.getNumTexCoords(); i++)
+			for(int i = 0; i < numTexCoords; i++)
             {
                 FloatTuple tuple = obj.getTexCoord(i);
                 for (int j=0; j<dimensions; j++)
                 {
-                    target.put(tuple.get(j));
+                    target[position++] = tuple.get(j);
                 }
             }
         }
@@ -687,7 +707,7 @@ public class ObjData
     public static float[] getNormalsArray(ReadableObj obj)
     {
         float[] array = new float[obj.getNumNormals() * 3];
-        getNormals(obj, FloatBuffer.wrap(array));
+        getNormals(obj, array);
         return array;
     }
 
@@ -703,8 +723,9 @@ public class ObjData
      */
     public static FloatBuffer getNormals(ReadableObj obj)
     {
-        FloatBuffer buffer = createDirectFloatBuffer(obj.getNumNormals() * 3);
-        getNormals(obj, buffer);
+        float[] array = getNormalsArray(obj);
+        FloatBuffer buffer = createDirectFloatBuffer(array.length);
+        buffer.put(array);
         buffer.position(0);
         return buffer;
     }
@@ -720,14 +741,16 @@ public class ObjData
      * @throws BufferOverflowException If the target can not store the result
      */
     public static void getNormals(
-        ReadableObj obj, FloatBuffer target)
+        ReadableObj obj, float[] target)
     {
-        for(int i = 0; i < obj.getNumNormals(); i++)
+        int position = 0;
+        int normals = obj.getNumNormals();
+        for(int i = 0; i < normals; i++)
         {
             FloatTuple tuple = obj.getNormal(i);
-            target.put(tuple.getX());
-            target.put(tuple.getY());
-            target.put(tuple.getZ());
+            target[position++] = tuple.getX();
+            target[position++] = tuple.getY();
+            target[position++] = tuple.getZ();
         }
     }
     
@@ -751,11 +774,14 @@ public class ObjData
      */
     public static ShortBuffer convertToShortBuffer(IntBuffer intBuffer)
     {
-        ShortBuffer shortBuffer = createDirectShortBuffer(intBuffer.capacity());
-        for (int i = 0; i < intBuffer.capacity(); i++)
+        short[] array = new short[intBuffer.capacity()];
+        for (int i = 0; i < array.length; i++)
         {
-            shortBuffer.put(i, (short) intBuffer.get());
+            array[i] = (short) intBuffer.get();
         }
+
+        ShortBuffer shortBuffer = createDirectShortBuffer(intBuffer.capacity());
+        shortBuffer.put(array);
         return shortBuffer;
     }    
     
