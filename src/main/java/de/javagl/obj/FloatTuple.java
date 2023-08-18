@@ -84,4 +84,11 @@ public interface FloatTuple
      * @return The dimensions of this tuple
      */
     int getDimensions();
+
+    /**
+     * Raw values as an array
+     *
+     * @return Raw values as an array
+     */
+    float[] getValues();
 }

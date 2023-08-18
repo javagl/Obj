@@ -211,7 +211,11 @@ final class DefaultFloatTuple implements FloatTuple
         return values.length;
     }
 
-    
+    @Override
+    public float[] getValues() {
+        return values;
+    }
+
     @Override
     public String toString()
     {
